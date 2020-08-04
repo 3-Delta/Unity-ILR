@@ -168,3 +168,6 @@ Client/ProjectSettings/ProjectVersion.txt
 /Client/Unity.ShaderGraph.Editor.csproj
 /Client/Unity.ShaderGraph.Editor.Tests.csproj
 /Client/Unity.ShaderGraph.Utilities.csproj
+/Resources/Hotfix/obj
+/Resources/Hotfix/.vs
+/Resources/Hotfix/bin
