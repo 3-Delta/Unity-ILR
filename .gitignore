@@ -6,7 +6,6 @@
 /Client/Client.Editor.csproj
 /Client/obj
 /Client/UnityPackageManager
-/Client/Packages
 /Server/UnityServer/Server/Library
 /Server/UnityServer/Server/Temp
 /Server/UnityServer/Server/.vs
