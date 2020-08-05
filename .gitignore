@@ -171,3 +171,9 @@ Client/ProjectSettings/ProjectVersion.txt
 /Resources/Hotfix/obj
 /Resources/Hotfix/.vs
 /Resources/Hotfix/bin
+/Client/Framework.csproj
+/Client/Unity.Rider.Editor.csproj
+/Client/Unity.VSCode.Editor.csproj
+/Client/UnityEditor.TestRunner.csproj
+/Client/UnityEngine.TestRunner.csproj
+/Resources/Hotfix/Hotfix.csproj
