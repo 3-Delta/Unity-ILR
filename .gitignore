@@ -177,3 +177,4 @@ Client/ProjectSettings/ProjectVersion.txt
 /Client/UnityEditor.TestRunner.csproj
 /Client/UnityEngine.TestRunner.csproj
 /Resources/Hotfix/Hotfix.csproj
+/Client/Runtime.csproj
