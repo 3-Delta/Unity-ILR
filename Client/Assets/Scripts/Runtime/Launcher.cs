@@ -1,18 +1,23 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class Launcher : MonoBehaviour
 {
-    public string dllPath = "../../Resources/Hotfix/bin/Debug/Hotfix.dll";
-    public string pdbPath = "../../Resources/Hotfix/bin/Debug/Hotfix.pdb";
-
     private void Start()
     {
-        string dllFullPath = Path.Combine(Application.dataPath, dllPath);
-        string pdbFullPath = Path.Combine(Application.dataPath, pdbPath);
+        string dllFullPath = ILRSettings.HotfixDllFullPath;
+        string pdbFullPath = ILRSettings.HotfixPdbFullPath;
         
         // 加载程序集
-        // 解析执行
+        AssemblyProxy.Init();
+        AssemblyProxy.CreateStaticMethod("Hotfix.InstanceClass", "StaticFunTest", 0);
+        AssemblyProxy.CreateStaticMethod("Hotfix.InstanceClass", "StaticFunTest2", 1);
+    }
+
+    private void OnDestroy()
+    {
+        AssemblyProxy.Clear();
     }
 }
