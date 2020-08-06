@@ -151,7 +151,7 @@ namespace UnityEngine.UI
         /// </example>
         public virtual Color color { get { return m_Color; } set { if (SetPropertyUtility.SetColor(ref m_Color, value)) SetVerticesDirty(); } }
 
-        [SerializeField] private bool m_RaycastTarget = true;
+        [SerializeField] private bool m_RaycastTarget = false;
 
         /// <summary>
         /// Should this graphic be considered a target for raycasting?

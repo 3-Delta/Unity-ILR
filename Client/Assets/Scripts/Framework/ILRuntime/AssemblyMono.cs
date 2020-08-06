@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AssemblyMono : IAssembly
 {
-    public Assembly assembly { get; private set; } = null;
+    private Assembly assembly = null;
 
     public object CreateInstance(string fullName)
     {
