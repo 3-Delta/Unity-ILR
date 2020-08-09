@@ -8,8 +8,4 @@ public class Launcher : MonoBehaviour
     private void Start()
     {
     }
-
-    private void OnDestroy()
-    {
-    }
 }
