@@ -3,25 +3,25 @@
 public interface IAssemblyMethod
 {
     void Exec();
-    void Exec(object arg1);
-    void Exec(object arg1, object arg2);
-    void Exec(object arg1, object arg2, object arg3);
+    void Exec<T1>(T1 arg1);
+    void Exec<T1, T2>(T1 arg1, T2 arg2);
+    void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
 }
 
 public abstract class StaticMethod : IAssemblyMethod
 {
     public abstract void Exec();
-    public abstract void Exec(object arg1);
-    public abstract void Exec(object arg1, object arg2);
-    public abstract void Exec(object arg1, object arg2, object arg3);
+    public abstract void Exec<T1>(T1 arg1);
+    public abstract void Exec<T1, T2>(T1 arg1, T2 arg2);
+    public abstract void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
 }
 
 public abstract class InstanceMethod : IAssemblyMethod
 {
     public abstract void Exec();
-    public abstract void Exec(object arg1);
-    public abstract void Exec(object arg1, object arg2);
-    public abstract void Exec(object arg1, object arg2, object arg3);
+    public abstract void Exec<T1>(T1 arg1);
+    public abstract void Exec<T1, T2>(T1 arg1, T2 arg2);
+    public abstract void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
 }
 
 public class ILRStaticMethod : StaticMethod
@@ -46,20 +46,20 @@ public class ILRStaticMethod : StaticMethod
         appDomain.Invoke(method, null, args);
     }
 
-    public override void Exec(object arg1)
+    public override void Exec<T1>(T1 arg1)
     {
         args[0] = arg1;
         appDomain.Invoke(method, null, args);
     }
 
-    public override void Exec(object arg1, object arg2)
+    public override void Exec<T1, T2>(T1 arg1, T2 arg2)
     {
         args[0] = arg1;
         args[1] = arg2;
         appDomain.Invoke(method, null, args);
     }
 
-    public override void Exec(object arg1, object arg2, object arg3)
+    public override void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
     {
         args[0] = arg1;
         args[1] = arg2;
@@ -93,20 +93,20 @@ public class ILRInstanceMethod : InstanceMethod
         appDomain.Invoke(method, instance, args);
     }
 
-    public override void Exec(object arg1)
+    public override void Exec<T1>(T1 arg1)
     {
         args[0] = arg1;
         appDomain.Invoke(method, instance, args);
     }
 
-    public override void Exec(object arg1, object arg2)
+    public override void Exec<T1, T2>(T1 arg1, T2 arg2)
     {
         args[0] = arg1;
         args[1] = arg2;
         appDomain.Invoke(method, instance, args);
     }
 
-    public override void Exec(object arg1, object arg2, object arg3)
+    public override void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
     {
         args[0] = arg1;
         args[1] = arg2;
@@ -131,20 +131,20 @@ public class MonoStaticMethod : StaticMethod
         method.Invoke(null, args);
     }
 
-    public override void Exec(object arg1)
+    public override void Exec<T1>(T1 arg1)
     {
         args[0] = arg1;
         method.Invoke(null, args);
     }
 
-    public override void Exec(object arg1, object arg2)
+    public override void Exec<T1, T2>(T1 arg1, T2 arg2)
     {
         args[0] = arg1;
         args[1] = arg2;
         method.Invoke(null, args);
     }
 
-    public override void Exec(object arg1, object arg2, object arg3)
+    public override void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
     {
         args[0] = arg1;
         args[1] = arg2;
@@ -176,20 +176,20 @@ public class MonoInstanceMethod : InstanceMethod
         method.Invoke(instance, args);
     }
 
-    public override void Exec(object arg1)
+    public override void Exec<T1>(T1 arg1)
     {
         args[0] = arg1;
         method.Invoke(instance, args);
     }
 
-    public override void Exec(object arg1, object arg2)
+    public override void Exec<T1, T2>(T1 arg1, T2 arg2)
     {
         args[0] = arg1;
         args[1] = arg2;
         method.Invoke(instance, args);
     }
 
-    public override void Exec(object arg1, object arg2, object arg3)
+    public override void Exec<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
     {
         args[0] = arg1;
         args[1] = arg2;
