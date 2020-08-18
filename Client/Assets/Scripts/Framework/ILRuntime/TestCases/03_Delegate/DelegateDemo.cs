@@ -6,6 +6,8 @@ using ILRuntime.CLR.TypeSystem;
 using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
+using ILRuntime.Runtime.Stack;
+
 //下面这行为了取消使用WWW的警告，Unity2018以后推荐使用UnityWebRequest，处于兼容性考虑Demo依然使用WWW
 #pragma warning disable CS0618
 
@@ -18,6 +20,16 @@ public class DelegateDemo : MonoBehaviour
     public static TestDelegateMethod TestMethodDelegate;
     public static TestDelegateFunction TestFunctionDelegate;
     public static System.Action<string> TestActionDelegate;
+    
+    public static System.Action<int> onUnEventLoaded;
+    public static event System.Action<int> onLoaded;
+
+    public static void AddLoadedListener(System.Action<int> action) {
+        onLoaded += action;
+    }
+    public static void RemoveLoadedListener(System.Action<int> action) {
+        onLoaded -= action;
+    }
 
     //AppDomain是ILRuntime的入口，最好是在一个单例类中保存，整个游戏全局就一个，这里为了示例方便，每个例子里面都单独做了一个
     //大家在正式项目中请全局只创建一个AppDomain
@@ -78,7 +90,7 @@ public class DelegateDemo : MonoBehaviour
         OnHotFixLoaded();
     }
 
-    void InitializeILRuntime()
+    unsafe void InitializeILRuntime()
     {
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
         //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
@@ -94,7 +106,6 @@ public class DelegateDemo : MonoBehaviour
         
         //ILRuntime内部是用Action和Func这两个系统内置的委托类型来创建实例的，所以其他的委托类型都需要写转换器
         //将Action或者Func转换成目标委托类型
-
         appdomain.DelegateManager.RegisterDelegateConvertor<TestDelegateMethod>((action) =>
         {
             //转换器的目的是把Action或者Func转换成正确的类型，这里则是把Action<int>转换成TestDelegateMethod
@@ -121,6 +132,15 @@ public class DelegateDemo : MonoBehaviour
                 ((System.Action<float>)action)(a);
             });
         });
+        
+        // var mi = typeof(DelegateDemo).GetMethod("add_onLoaded", new System.Type[] { typeof(object) });
+        foreach (var i in typeof(DelegateDemo).GetMethods()) {
+            // Debug.LogError(i.Name + "  " + i.IsSpecialName + "  " + (i.GetParameters().Length));
+            if (i.Name == "add_onLoaded" && i.GetParameters().Length == 1)
+            {
+                appdomain.RegisterCLRMethodRedirection(i, AddDelegate);
+            }
+        }
     }
 
     void OnHotFixLoaded()
@@ -139,12 +159,14 @@ public class DelegateDemo : MonoBehaviour
         TestMethodDelegate(789);
         var str = TestFunctionDelegate(098);
         Debug.Log("!! OnHotFixLoaded str = " + str);
+        
+        Debug.Log("我们自定义的event代理测试 -------------------->>>>>>>>>>");
+        appdomain.Invoke("HotFix.TestDelegate", "Initialize3", null, null);
+        onLoaded?.Invoke(3);
+        appdomain.Invoke("HotFix.TestDelegate", "Initialize4", null, null);
+        onLoaded?.Invoke(4);
+        
         TestActionDelegate("Hello From Unity Main Project");
-
-    }
-
-    void Update()
-    {
 
     }
 
@@ -156,5 +178,11 @@ public class DelegateDemo : MonoBehaviour
             p.Close();
         fs = null;
         p = null;
+    }
+
+    public unsafe static StackObject* AddDelegate(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+    {
+        Debug.LogError("here we go AddDelegate!");
+        return CLRRedirections.DelegateCombine(intp, esp, mStack, method, isNewObj);
     }
 }

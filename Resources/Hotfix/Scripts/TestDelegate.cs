@@ -26,17 +26,29 @@ namespace HotFix
 
         public static void Initialize2()
         {
-            DelegateDemo.TestMethodDelegate = Method;
-            DelegateDemo.TestFunctionDelegate = Function;
-            DelegateDemo.TestActionDelegate = Action;
+            UnityEngine.Debug.Log("!! Initialize2  测试 += Delegate.Combine");
+            DelegateDemo.TestMethodDelegate += Method;
+            DelegateDemo.TestFunctionDelegate += Function;
+            DelegateDemo.TestActionDelegate += Action;
         }
 
         public static void RunTest2()
         {
             DelegateDemo.TestMethodDelegate(123);
             var res = DelegateDemo.TestFunctionDelegate(456);
-            UnityEngine.Debug.Log("!! TestDelegate.RunTest2 res = " + res);
+            UnityEngine.Debug.Log("!! TestDelegate.RunTest2 res" + res);
             DelegateDemo.TestActionDelegate("rrr");
+        }
+
+        public static void Initialize3() {
+            UnityEngine.Debug.Log("!! TestDelegate.RunTest3 +=" );
+            DelegateDemo.onLoaded += Method;
+        }
+
+        public static void Initialize4() {
+            UnityEngine.Debug.Log("!! TestDelegate.RunTest4 AddLoadedListener");
+            DelegateDemo.RemoveLoadedListener(Method);
+            DelegateDemo.AddLoadedListener(Method);
         }
 
         static void Method(int a)

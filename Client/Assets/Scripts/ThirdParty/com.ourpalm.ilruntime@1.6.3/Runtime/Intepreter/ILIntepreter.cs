@@ -1812,12 +1812,13 @@ namespace ILRuntime.Runtime.Intepreter
                                             {
                                                 var redirect = cm.Redirection;
                                                 if (redirect != null) {
+                                                    UnityEngine.Debug.LogError("重定向执行 " + cm.DeclearingType.FullName + "." + cm.Name);
                                                     esp = redirect(this, esp, mStack, cm, false);
                                                 }
                                                 else
                                                 {
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
-                                                    UnityEngine.Debug.LogError("反射执行");
+                                                    UnityEngine.Debug.LogError("反射执行 " + cm.DeclearingType.FullName + "." + cm.Name);
                                                     
                                                     if (!allowUnboundCLRMethod)
                                                         throw new NotSupportedException(cm.ToString() + " is not bound!");
