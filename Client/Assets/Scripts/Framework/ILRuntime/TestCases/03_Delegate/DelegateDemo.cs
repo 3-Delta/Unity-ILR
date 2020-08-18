@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using ILRuntime.CLR.TypeSystem;
 using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
 using ILRuntime.Runtime.Stack;
+using AppDomain = ILRuntime.Runtime.Enviorment.AppDomain;
 
 //下面这行为了取消使用WWW的警告，Unity2018以后推荐使用UnityWebRequest，处于兼容性考虑Demo依然使用WWW
 #pragma warning disable CS0618
@@ -133,7 +136,8 @@ public class DelegateDemo : MonoBehaviour
             });
         });
         
-        // var mi = typeof(DelegateDemo).GetMethod("add_onLoaded", new System.Type[] { typeof(object) });
+        // 方式1： 处理add_onLoaded
+        /*
         foreach (var i in typeof(DelegateDemo).GetMethods()) {
             // Debug.LogError(i.Name + "  " + i.IsSpecialName + "  " + (i.GetParameters().Length));
             if (i.Name == "add_onLoaded" && i.GetParameters().Length == 1)
@@ -141,6 +145,11 @@ public class DelegateDemo : MonoBehaviour
                 appdomain.RegisterCLRMethodRedirection(i, AddDelegate);
             }
         }
+        */
+
+        // 方式2： 处理add_onLoaded
+        MethodInfo mi = typeof(DelegateDemo).GetMethod("add_onLoaded", new Type[] {typeof(System.Action<int>)});
+        appdomain.RegisterCLRMethodRedirection(mi, AddDelegate);
     }
 
     void OnHotFixLoaded()
