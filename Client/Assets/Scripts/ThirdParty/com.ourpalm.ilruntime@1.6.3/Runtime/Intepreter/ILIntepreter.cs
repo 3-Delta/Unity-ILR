@@ -1811,11 +1811,14 @@ namespace ILRuntime.Runtime.Intepreter
                                             if (!processed)
                                             {
                                                 var redirect = cm.Redirection;
-                                                if (redirect != null)
+                                                if (redirect != null) {
                                                     esp = redirect(this, esp, mStack, cm, false);
+                                                }
                                                 else
                                                 {
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
+                                                    UnityEngine.Debug.LogError("反射执行");
+                                                    
                                                     if (!allowUnboundCLRMethod)
                                                         throw new NotSupportedException(cm.ToString() + " is not bound!");
 #endif
