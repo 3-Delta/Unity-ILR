@@ -7,7 +7,7 @@ public static class ILRService
     public static void Init(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
         // 代理适配器
-        RegisterMethodDelegate(appDomain);
+        RegisterDelegate(appDomain);
         
         // 继承适配器【热更类型继承框架类型】
         RegisterAdaptor(appDomain);
@@ -31,7 +31,7 @@ public static class ILRService
 #endif
     }
 
-    private static void RegisterMethodDelegate(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
+    private static void RegisterDelegate(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
         ILRuntime.Runtime.Generated.CLRManualDelegates.Initialize(appDomain);
         // todo: 将来由DelegateCodeGenerater.cs生成
