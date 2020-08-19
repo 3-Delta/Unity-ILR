@@ -13,6 +13,11 @@ public static class ILRSettings
     public const string BindingAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRBindings/Analysis";
     
     /// <summary>
+    /// 设定的自动生成的delegate脚本文件夹路径
+    /// </summary>
+    public const string DelegateAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRDelegates";
+    
+    /// <summary>
     /// 设定的自动生成的适配脚本文件夹路径
     /// </summary>
     public const string AdaptorAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRAdapters/Analysis";

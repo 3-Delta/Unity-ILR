@@ -6,12 +6,8 @@ public static class ILRService
 { 
     public static void Init(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
-        // Action
+        // 代理适配器
         RegisterMethodDelegate(appDomain);
-        // Func
-        RegisterFuncDelegate(appDomain);
-        // Converter
-        RegisterDelegateConverter(appDomain);
         
         // 继承适配器【热更类型继承框架类型】
         RegisterAdaptor(appDomain);
@@ -37,64 +33,14 @@ public static class ILRService
 
     private static void RegisterMethodDelegate(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
-        appDomain.DelegateManager.RegisterMethodDelegate<List<object>>();
-        appDomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
-        appDomain.DelegateManager.RegisterMethodDelegate<UInt32>();
-        appDomain.DelegateManager.RegisterMethodDelegate<Int32>();
-        appDomain.DelegateManager.RegisterMethodDelegate<String>();
-        appDomain.DelegateManager.RegisterMethodDelegate<Boolean>();
-        appDomain.DelegateManager.RegisterMethodDelegate<Single>();
-        appDomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Vector3>();
-        appDomain.DelegateManager.RegisterMethodDelegate<int>();
-        appDomain.DelegateManager.RegisterMethodDelegate<string>();
-    }
-
-    private static void RegisterFuncDelegate(ILRuntime.Runtime.Enviorment.AppDomain appDomain) {
-        appDomain.DelegateManager.RegisterFunctionDelegate<ILTypeInstance>();
-        appDomain.DelegateManager.RegisterFunctionDelegate<int, string>();
-    }
-    private static void RegisterDelegateConverter(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
-    {
-        appDomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction>((act) =>
-        {
-            return new UnityEngine.Events.UnityAction(() =>
-            {
-                ((System.Action)act)();
-            });
-        });
-        appDomain.DelegateManager.RegisterDelegateConvertor<System.Predicate<System.Reflection.ConstructorInfo>>((act) =>
-        {
-            return new System.Predicate<System.Reflection.ConstructorInfo>((obj) =>
-            {
-                return ((Func<System.Reflection.ConstructorInfo, System.Boolean>)act)(obj);
-            });
-        });
-        appDomain.DelegateManager.RegisterDelegateConvertor<TestDelegateMethod>((action) =>
-        {
-            return new TestDelegateMethod((a) =>
-            {
-                ((System.Action<int>)action)(a);
-            });
-        });
-        appDomain.DelegateManager.RegisterDelegateConvertor<TestDelegateFunction>((action) =>
-        {
-            return new TestDelegateFunction((a) =>
-            {
-                return ((System.Func<int, string>)action)(a);
-            });
-        });
-        appDomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<float>>((action) =>
-        {
-            return new UnityEngine.Events.UnityAction<float>((a) =>
-            {
-                ((System.Action<float>)action)(a);
-            });
-        });
+        ILRuntime.Runtime.Generated.CLRManualDelegates.Initialize(appDomain);
+        // todo: 将来由DelegateCodeGenerater.cs生成
+        // ILRuntime.Runtime.Generated.CLRAnalysisDelegates.Initialize(appDomain);
     }
     private static void RegisterAdaptor(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
-        ManualAdapterRegister.Register(appDomain);
-        AnalysisAdapterRegister.Register(appDomain);
+        ILRuntime.Runtime.Generated.CLRManualAdapterRegistion.Register(appDomain);
+        ILRuntime.Runtime.Generated.CLRAnalysisAdapterRegistion.Register(appDomain);
     }
     private static void RegisterBinder(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
@@ -104,12 +50,12 @@ public static class ILRService
     }
     private static void RegisterRedirection(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
-        ILRRedirection.Register(appDomain);
+        ILRuntime.Runtime.Generated.ILRManualRedirection.Register(appDomain);
     }
-
     private static void RegisterBinding(ILRuntime.Runtime.Enviorment.AppDomain appDomain) 
     {
-        ILRuntime.Runtime.Generated.CLRBindings.Initialize(appDomain);
         ILRuntime.Runtime.Generated.CLRManualBindings.Initialize(appDomain);
+        // 如果这里编译报错，则暂时注释，然后回到unity点击菜单栏的Tools，生成绑定文件
+        ILRuntime.Runtime.Generated.CLRBindings.Initialize(appDomain);
     }
 }

@@ -18,6 +18,25 @@ public static class Menu_ILRuntime
         AdapterCodeGenerater.Generate(types);
     }
     
+    [MenuItem("Tools/ILRuntime/Generate CLR Delegate Code by Analysis")]
+    private static void GenerateCLRDelegateByAnalysis()
+    {
+	    AssetDatabase.DeleteAsset(ILRSettings.DelegateAnalysisFolderPath);
+	    Directory.CreateDirectory(ILRSettings.DelegateAnalysisFolderPath);
+	    
+	    string dllFilePath = ILRSettings.HotfixDllFullPath;
+	    using (FileStream fs = new FileStream(dllFilePath, FileMode.Open, FileAccess.Read))
+	    {
+		    ILRuntime.Runtime.Enviorment.AppDomain appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+		    appDomain.LoadAssembly(fs);
+		    ILRService.Init(appDomain);
+		    // 生成所有绑定脚本
+		    DelegateCodeGenerater.Generate(appDomain, ILRSettings.DelegateAnalysisFolderPath);
+	    }
+
+	    AssetDatabase.Refresh();
+    }
+    
     [MenuItem("Tools/ILRuntime/Generate CLR Binding Code by Analysis")]
     private static void GenerateCLRBindingByAnalysis()
 	{
@@ -31,16 +50,8 @@ public static class Menu_ILRuntime
 		{
             ILRuntime.Runtime.Enviorment.AppDomain appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
             appDomain.LoadAssembly(fs);
-
-            // Crossbind Adapter is needed to generate the correct binding code
-
+            
             ILRService.Init(appDomain);
-            // Instead of
-            // ManualAdapterRegister.Register(appDomain);
-            // AnalysisAdapterRegister.Register(appDomain);
-
-            // Todo 生成原理？？？
-            // 生成所有绑定脚本
             ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(appDomain, ILRSettings.BindingAnalysisFolderPath);
 		}
 
