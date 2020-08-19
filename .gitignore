@@ -177,3 +177,10 @@ Client/ProjectSettings/ProjectVersion.txt
 /Client/UnityEditor.TestRunner.csproj
 /Client/UnityEngine.TestRunner.csproj
 /Client/Runtime.csproj
+/Client/Assets/Scripts/Framework/ILRuntime/ILRBindings/Analysis
+/Client/Assets/Scripts/Framework/ILRuntime/ILRBindings/Analysis.meta
+/Client/Assets/Scripts/Framework/ILRuntime/ILRAdapters/Analysis.meta
+/Client/Assets/Scripts/Framework/ILRuntime/ILRAdapters/Analysis
+/Client/Packages/manifest.json
+/Client/Packages/packages-lock.json
+/Client/*.csproj
