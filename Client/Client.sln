@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30309.148
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILRuntime", "ILRuntime.csproj", "{3A1B5603-11F7-7316-45AA-7CA85DBB695E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework.csproj", "{2FBA3F51-0B1A-2C4E-44AC-2AEAC2FC1A14}"
@@ -32,8 +30,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Core.Editor", "Unity.RenderPipelines.Core.Editor.csproj", "{741CA140-855B-CF49-80B3-C95E2E3ED3FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.ShaderGraph.Utilities", "Unity.ShaderGraph.Utilities.csproj", "{DC99C9BB-796F-12C6-EF3F-C896533D717C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotfix", "..\Resources\Hotfix\Hotfix.csproj", "{9AA23530-C9A6-478D-90A4-C897C7147769}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,15 +97,8 @@ Global
 		{DC99C9BB-796F-12C6-EF3F-C896533D717C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC99C9BB-796F-12C6-EF3F-C896533D717C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC99C9BB-796F-12C6-EF3F-C896533D717C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9AA23530-C9A6-478D-90A4-C897C7147769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9AA23530-C9A6-478D-90A4-C897C7147769}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9AA23530-C9A6-478D-90A4-C897C7147769}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9AA23530-C9A6-478D-90A4-C897C7147769}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A89F5862-01E8-401A-896F-55696B8080E3}
 	EndGlobalSection
 EndGlobal

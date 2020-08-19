@@ -241,10 +241,15 @@ namespace ILRuntime.CLR.Utils
             }
             else if ((typeFlags & TypeFlags.IsDelegate) != 0)
             {
+                // UnityEngine.Debug.LogError("类型：" + pt + " objType" + obj.GetType());
+                
                 if (obj is Delegate)
                     return obj;
-                if (pt == typeof(Delegate))
+                // 默认代理类型
+                if (pt == typeof(Delegate)) {
                     return ((IDelegateAdapter)obj).Delegate;
+                }
+                // 自定义代理类型
                 return ((IDelegateAdapter)obj).GetConvertor(pt);
             }
             else if ((typeFlags & TypeFlags.IsByRef) != 0)

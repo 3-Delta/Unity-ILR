@@ -42,6 +42,9 @@ public class DelegateDemo : MonoBehaviour
 
     void Start()
     {
+        int count = ZeroList.Count;
+        Debug.LogError("测试 debug环境下，属性是否内联 " + count);
+        
         StartCoroutine(LoadHotFixAssembly());
     }
 
@@ -88,7 +91,7 @@ public class DelegateDemo : MonoBehaviour
         {
             Debug.LogError("加载热更DLL失败，请确保已经通过VS打开Assets/Samples/ILRuntime/1.6/Demo/HotFix_Project/HotFix_Project.sln编译过热更DLL");
         }
-
+        
         InitializeILRuntime();
         OnHotFixLoaded();
     }
@@ -101,7 +104,7 @@ public class DelegateDemo : MonoBehaviour
 #endif
         //这里做一些ILRuntime的注册
         //TestDelegateMethod, 这个委托类型为有个参数为int的方法，注册仅需要注册不同的参数搭配即可
-        appdomain.DelegateManager.RegisterMethodDelegate<int>();
+        // appdomain.DelegateManager.RegisterMethodDelegate<int>();
         //带返回值的委托的话需要用RegisterFunctionDelegate，返回类型为最后一个
         appdomain.DelegateManager.RegisterFunctionDelegate<int, string>();
         //Action<string> 的参数为一个string
