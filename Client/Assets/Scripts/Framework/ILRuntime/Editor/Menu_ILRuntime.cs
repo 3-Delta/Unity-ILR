@@ -15,7 +15,7 @@ public static class Menu_ILRuntime
         //types.Add((typeof(System.Exception)));
         //types.Add(typeof(System.Collections.IEnumerable));
 
-        AdapterGenerater.Generate(types);
+        AdapterCodeGenerater.Generate(types);
     }
     
     [MenuItem("Tools/ILRuntime/Generate CLR Binding Code by Analysis")]

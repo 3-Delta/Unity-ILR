@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 
-public static class AdapterGenerater
+public static class AdapterCodeGenerater
 {
     public static void Generate(List<Type> adapterList)
     {
@@ -74,7 +74,6 @@ public static class AdapterRegister
             }
         }
     }
-
 
     private static void GenAdapterFile(Type t, string dir)
     {
