@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+
 namespace HotFix
 {
     public class TestDelegate
@@ -28,8 +30,16 @@ namespace HotFix
         {
             UnityEngine.Debug.Log("!! Initialize2  测试 += Delegate.Combine");
             DelegateDemo.TestMethodDelegate += Method;
+            DelegateDemo.TestMethodDelegate += (a)=> {
+                UnityEngine.Debug.Log("!! Initialize2  测试 += TestMethodDelegate");
+            };
+
             DelegateDemo.TestFunctionDelegate += Function;
+
             DelegateDemo.TestActionDelegate += Action;
+            DelegateDemo.TestActionDelegate += (a)=> {
+                UnityEngine.Debug.Log("!! Initialize2  测试 += TestActionDelegate");
+            };
         }
 
         public static void RunTest2()
@@ -54,6 +64,11 @@ namespace HotFix
         static void Method(int a)
         {
             UnityEngine.Debug.Log("!! TestDelegate.Method, a = " + a);
+
+            var request = Resources.LoadAsync<GameObject>(null);
+            request.completed += (t) => {
+                UnityEngine.Debug.Log("!! 异步加载完成 ");
+            };
         }
 
         static string Function(int a)
