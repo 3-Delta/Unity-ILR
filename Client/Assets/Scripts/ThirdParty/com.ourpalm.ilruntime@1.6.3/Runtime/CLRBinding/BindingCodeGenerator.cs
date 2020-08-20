@@ -184,6 +184,11 @@ namespace ILRuntime.Runtime.Generated
                     continue;
                 Type i = info.Value.Type;
 
+                // 跳过editor的绑定生成
+                if (i.FullName.StartsWith("UnityEditor")) {
+                    continue;
+                }
+
                 //CLR binding for delegate is important for cross domain invocation,so it should be generated
                 //if (i.BaseType == typeof(MulticastDelegate))
                 //    continue;

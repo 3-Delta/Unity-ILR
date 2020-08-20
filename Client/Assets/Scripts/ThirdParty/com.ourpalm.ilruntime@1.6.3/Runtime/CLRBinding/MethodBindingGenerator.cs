@@ -280,6 +280,26 @@ namespace ILRuntime.Runtime.CLRBinding
                             else
                                 sb.AppendLine(string.Format("{2}.{0} = {1};", t[1], param[0].Name, typeClsName));
                         }
+                        else if (propType == "add")
+                        {
+                            bool isIndexer = param.Length > 1;
+                            if (isIndexer)
+                            {
+                                sb.AppendLine(string.Format("{2}[{0}] += {1};", param[0].Name, param[1].Name, typeClsName));
+                            }
+                            else
+                                sb.AppendLine(string.Format("{2}.{0} += {1};", t[1], param[0].Name, typeClsName));
+                        }
+                        else if (propType == "remove")
+                        {
+                            bool isIndexer = param.Length > 1;
+                            if (isIndexer)
+                            {
+                                sb.AppendLine(string.Format("{2}[{0}] -= {1};", param[0].Name, param[1].Name, typeClsName));
+                            }
+                            else
+                                sb.AppendLine(string.Format("{2}.{0} -= {1};", t[1], param[0].Name, typeClsName));
+                        }
                         else if (propType == "op")
                         {
                             switch (t[1])
@@ -372,6 +392,26 @@ namespace ILRuntime.Runtime.CLRBinding
                             }
                             else
                                 sb.AppendLine(string.Format("instance_of_this_method.{0} = {1};", t[1], param[0].Name));
+                        }
+                        else if (propType == "add")
+                        {
+                            bool isIndexer = param.Length > 1;
+                            if (isIndexer)
+                            {
+                                sb.AppendLine(string.Format("instance_of_this_method[{0}] += {1};", param[0].Name, param[1].Name));
+                            }
+                            else
+                                sb.AppendLine(string.Format("instance_of_this_method.{0} += {1};", t[1], param[0].Name));
+                        }
+                        else if (propType == "remove")
+                        {
+                            bool isIndexer = param.Length > 1;
+                            if (isIndexer)
+                            {
+                                sb.AppendLine(string.Format("instance_of_this_method[{0}] -= {1};", param[0].Name, param[1].Name));
+                            }
+                            else
+                                sb.AppendLine(string.Format("instance_of_this_method.{0} -= {1};", t[1], param[0].Name));
                         }
                         else
                             throw new NotImplementedException();
