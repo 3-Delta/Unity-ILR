@@ -72,6 +72,7 @@
     <Compile Include="Scripts\TestCLRRedirection.cs" />
     <Compile Include="Scripts\TestCoroutine.cs" />
     <Compile Include="Scripts\TestDelegate.cs" />
+    <Compile Include="Scripts\TestGenericClass.cs" />
     <Compile Include="Scripts\TestInheritance.cs" />
     <Compile Include="Scripts\TestJson.cs" />
     <Compile Include="Scripts\TestMonoBehaviour.cs" />

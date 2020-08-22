@@ -155,7 +155,7 @@ namespace ILRuntime.Runtime.Intepreter
 
         public object CLRInstance { get { return clrInstance; } set { clrInstance = value; } }
 
-        protected ILTypeInstance()
+        public ILTypeInstance()
         {
 
         }

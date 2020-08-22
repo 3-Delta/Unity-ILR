@@ -15,7 +15,7 @@ public static class ILRSettings
     /// <summary>
     /// 设定的自动生成的delegate脚本文件夹路径
     /// </summary>
-    public const string DelegateAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRDelegates";
+    public const string DelegateAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRDelegates/Analysis";
     
     /// <summary>
     /// 设定的自动生成的适配脚本文件夹路径

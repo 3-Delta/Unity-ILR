@@ -14,6 +14,10 @@ public static class Menu_ILRuntime
         //types.Add((typeof(UnityEngine.ScriptableObject)));
         //types.Add((typeof(System.Exception)));
         //types.Add(typeof(System.Collections.IEnumerable));
+        types.Add((typeof(IComparable)));
+        types.Add((typeof(IComparable<object>)));
+        types.Add((typeof(IEnumerable)));
+        types.Add((typeof(IEqualityComparer<object>)));
 
         AdapterCodeGenerater.Generate(types);
     }
