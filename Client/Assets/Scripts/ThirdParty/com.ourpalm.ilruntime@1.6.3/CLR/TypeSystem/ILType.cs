@@ -1098,15 +1098,20 @@ namespace ILRuntime.CLR.TypeSystem
         public ILTypeInstance Instantiate(bool callDefaultConstructor = true)
         {
             var res = new ILTypeInstance(this);
-            if (callDefaultConstructor)
+            if (callDefaultConstructor) 
             {
-                var m = GetConstructor(CLR.Utils.Extensions.EmptyParamList);
-                if (m != null)
-                {
-                    appdomain.Invoke(m, res, null);
-                }
+                CallDefaultConstructor(res);
             }
             return res;
+        }
+        public ILTypeInstance CallDefaultConstructor(ILTypeInstance instance)
+        {
+            var m = GetConstructor(CLR.Utils.Extensions.EmptyParamList);
+            if (m != null)
+            {
+                appdomain.Invoke(m, instance, null);
+            }
+            return instance;
         }
 
         public ILTypeInstance Instantiate(object[] args)

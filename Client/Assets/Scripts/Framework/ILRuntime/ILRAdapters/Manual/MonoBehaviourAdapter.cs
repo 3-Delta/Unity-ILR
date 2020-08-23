@@ -1,58 +1,53 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using ILRuntime.Other;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
-using ILRuntime.CLR.Method;
-
 
 public class MonoBehaviourAdapter : CrossBindingAdaptor
 {
-    public override Type BaseCLRType
-    {
-        get
-        {
-            return typeof(MonoBehaviour);
-        }
-    }
-
-    public override Type AdaptorType
-    {
-        get
-        {
-            return typeof(Adaptor);
-        }
-    }
-
-    public override object CreateCLRInstance(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
-    {
-        return new Adaptor(appdomain, instance);
-    }
-    //为了完整实现MonoBehaviour的所有特性，这个Adapter还得扩展，这里只抛砖引玉，只实现了最常用的Awake, Start和Update
-    public class Adaptor : MonoBehaviour, CrossBindingAdaptorType
-    {
-        ILTypeInstance instance;
-        ILRuntime.Runtime.Enviorment.AppDomain appdomain;
-
-        public Adaptor()
-        {
-
-        }
-
-        public Adaptor(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
-        {
-            this.appdomain = appdomain;
-            this.instance = instance;
-        }
-
-        public ILTypeInstance ILInstance { get { return instance; } set { instance = value; } }
-
+	public override Type BaseCLRType
+	{
+	    get
+	    {
+	        return typeof(UnityEngine.MonoBehaviour);// 这是你想继承的那个类
+	    }
+	}
+	public override Type AdaptorType
+	{
+	    get
+	    {
+	        return typeof(Adaptor);// 这是实际的适配器类
+	    }
+	}
+	public override object CreateCLRInstance(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+	{
+	    return new Adaptor(appdomain, instance);// 创建一个新的实例
+	}
+	// 实际的适配器类需要继承你想继承的那个类，并且实现CrossBindingAdaptorType接口
+	public class Adaptor : UnityEngine.MonoBehaviour, CrossBindingAdaptorType
+	{
+	    ILTypeInstance instance;
+	    ILRuntime.Runtime.Enviorment.AppDomain appdomain;
+	    
+	    public ILTypeInstance ILInstance { get { return instance; } set { instance = value; } }
         public ILRuntime.Runtime.Enviorment.AppDomain AppDomain { get { return appdomain; } set { appdomain = value; } }
+	    // 缓存这个数组来避免调用时的GC Alloc
+	    
+	    object[] param1 = new object[1];
+	    public Adaptor()
+	    {
+	        // 因为是通过Addcomponent添加的，所以没有调用CreateCLRInstance，所以需要外部手动设置instance/appdomain
+	    }
+	    public Adaptor(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+	    {
+	        this.appdomain = appdomain;
+	        this.instance = instance;
+	    }
 
-        IMethod mAwakeMethod;
-        bool mAwakeMethodGot;
+	    private IMethod mAwakeMethod;
+        private bool mAwakeMethodGot;
         public void Awake()
         {
             //Unity会在ILRuntime准备好这个实例前调用Awake，所以这里暂时先不掉用
@@ -71,8 +66,8 @@ public class MonoBehaviourAdapter : CrossBindingAdaptor
             }
         }
 
-        IMethod mStartMethod;
-        bool mStartMethodGot;
+        private IMethod mStartMethod;
+        private bool mStartMethodGot;
         void Start()
         {
             if (!mStartMethodGot)
@@ -87,8 +82,8 @@ public class MonoBehaviourAdapter : CrossBindingAdaptor
             }
         }
 
-        IMethod mUpdateMethod;
-        bool mUpdateMethodGot;
+        private IMethod mUpdateMethod;
+        private bool mUpdateMethodGot;
         void Update()
         {
             if (!mUpdateMethodGot)
@@ -112,7 +107,9 @@ public class MonoBehaviourAdapter : CrossBindingAdaptor
                 return instance.ToString();
             }
             else
+            {
                 return instance.Type.FullName;
+            }
         }
     }
 }

@@ -93,6 +93,9 @@ public class MonoBehaviourDemo : MonoBehaviour
         appdomain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
         appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
         //ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
+        
+        ILRuntime.Runtime.Generated.CLRManualBindings.Initialize(appdomain);
+        ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
     }
 
     unsafe void OnHotFixLoaded()
@@ -104,13 +107,13 @@ public class MonoBehaviourDemo : MonoBehaviour
         Debug.Log("直接调用GameObject.AddComponent<T>会报错，这是因为这个方法是Unity实现的，他并不可能取到热更DLL内部的类型");
         Debug.Log("因此我们需要挟持AddComponent方法，然后自己实现");
         Debug.Log("我们先销毁掉之前创建的不合法的MonoBehaviour");
-        SetupCLRRedirection();
+        // SetupCLRRedirection();
         appdomain.Invoke("HotFix.TestMonoBehaviour", "RunTest", null, gameObject);
 
         Debug.Log("可以看到已经成功了");
         Debug.Log("下面做另外一个实验");
         Debug.Log("GetComponent跟AddComponent类似，需要我们自己处理");
-        SetupCLRRedirection2();
+        // SetupCLRRedirection2();
         appdomain.Invoke("HotFix.TestMonoBehaviour", "RunTest2", null, gameObject);
         Debug.Log("成功了");
         Debug.Log("那我们怎么从Unity主工程获取热更DLL的MonoBehaviour呢？");

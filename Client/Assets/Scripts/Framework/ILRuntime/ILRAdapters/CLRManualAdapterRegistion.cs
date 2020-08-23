@@ -11,6 +11,7 @@ namespace ILRuntime.Runtime.Generated
             appDomain.RegisterCrossBindingAdaptor(new ScriptableObjectAdapter());
             appDomain.RegisterCrossBindingAdaptor(new ExceptionAdapter());
             appDomain.RegisterCrossBindingAdaptor(new IEnumerableAdapter());
+            appDomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineAdaptor());
             appDomain.RegisterCrossBindingAdaptor(new ILRuntimeDemo.TestClassBaseAdapter());
         }
     }

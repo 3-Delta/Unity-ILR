@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+
 namespace HotFix
 {
     //一定要特别注意，:后面只允许有1个Unity主工程的类或者接口，但是可以有随便多少个热更DLL中的接口

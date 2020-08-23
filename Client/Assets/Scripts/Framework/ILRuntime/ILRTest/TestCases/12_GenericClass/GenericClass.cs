@@ -78,17 +78,17 @@ public class GenericClass : MonoBehaviour
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
         //这里做一些ILRuntime的注册，这里应该写继承适配器的注册，为了演示方便，这个例子写在OnHotFixLoaded了
+        
+        ILRuntime.Runtime.Generated.CLRManualBindings.Initialize(appdomain);
+        // 如果这里编译报错，则暂时注释，然后回到unity点击菜单栏的Tools，生成绑定文件
+        ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
     }
 
     void OnHotFixLoaded()
     {
+        appdomain.Invoke("HotFix.TestgGenericClass", "Initialize", null, null);
     }
-
-    void Update()
-    {
-
-    }
-
+    
     private void OnDestroy()
     {
         if (fs != null)
