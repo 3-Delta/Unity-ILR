@@ -105,6 +105,7 @@ namespace ILRuntime.Runtime.Generated
                     if(m.MatchGenericParameters(args, typeof(global::MonoBehaviourAdapter.Adaptor[])))
                     {
                         method = m.MakeGenericMethod(args);
+                        // 参考：ENum.GetValues是如何处理数组的
                         appDomain.RegisterCLRMethodRedirection(method, GetComponents_4);
             
                         break;

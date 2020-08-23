@@ -155,11 +155,14 @@ namespace ILRuntime.Runtime.Intepreter
 
         public object CLRInstance { get { return clrInstance; } set { clrInstance = value; } }
 
-        public ILTypeInstance()
+        public ILTypeInstance TryReset(ILType type, bool initializeCLRInstance = true)
         {
-
+            if (this.Type != null) {
+                return this;
+            }
+            return Reset(type, initializeCLRInstance);
         }
-        public ILTypeInstance(ILType type, bool initializeCLRInstance = true)
+        public ILTypeInstance Reset(ILType type, bool initializeCLRInstance = true)
         {
             this.type = type;
             fields = new StackObject[type.TotalFieldCount];
@@ -190,6 +193,14 @@ namespace ILRuntime.Runtime.Intepreter
             }
             else
                 clrInstance = this;
+
+            return this;
+        }
+        
+        public ILTypeInstance() { }
+        public ILTypeInstance(ILType type, bool initializeCLRInstance = true)
+        {
+            Reset(type, initializeCLRInstance);
         }
 
         public unsafe object this[int index]
