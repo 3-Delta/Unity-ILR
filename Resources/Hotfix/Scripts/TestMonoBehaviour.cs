@@ -92,6 +92,10 @@ namespace HotFix
 
             Debug.Log("!!!TestMonoBehaviour.RunTest2 mb == null? " + (mb == null) + " mb = " + mb);
             mb.Test2();
+
+            Debug.Log("==============");
+            float f = (new Vector3(1, 1, 1) + new Vector3(2, 2, 2)).x;
+            Debug.Log("==============  " + f);
         }
     }
 }
