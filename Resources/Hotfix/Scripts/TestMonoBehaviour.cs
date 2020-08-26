@@ -96,6 +96,9 @@ namespace HotFix
             Debug.Log("==============");
             float f = (new Vector3(1, 1, 1) + new Vector3(2, 2, 2)).x;
             Debug.Log("==============  " + f);
+            var fv = new Vector3(1, 1, 1);
+            fv.Set(1, 2, 3);
+            Debug.Log("==============  " + fv.y);
         }
     }
 }
