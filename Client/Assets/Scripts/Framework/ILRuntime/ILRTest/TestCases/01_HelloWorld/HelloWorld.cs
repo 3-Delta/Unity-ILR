@@ -83,7 +83,7 @@ public class HelloWorld : MonoBehaviour
         // HelloWorld，第一次方法调用
         appdomain.Invoke("HotFix.InstanceClass", "StaticFunTest", null, null);
         
-        
+        appdomain.Invoke("HotFix.InstanceClass", "StaticFUncTestDateTime", null, null);
         hasLoaded = true;
     }
 

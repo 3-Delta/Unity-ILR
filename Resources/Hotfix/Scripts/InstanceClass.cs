@@ -34,11 +34,12 @@ namespace HotFix
         }
 
         public static void StaticFUncTestDateTime() {
-            //DateTime time = new DateTime(1970, 1, 1, 0, 0, 0);
-            //time = time.AddSeconds(DateTime.Now.Second - 8 * 3600).ToLocalTime();
-            //UnityEngine.Debug.LogError(time);
+            DateTime time = new DateTime(1970, 1, 1, 0, 0, 0);
+            time = time.AddSeconds(DateTime.Now.Second - 8 * 3600).ToLocalTime();
+            UnityEngine.Debug.LogError("time:" + time);
 
             UnityEngine.Vector3 v3 = new UnityEngine.Vector3(1f, 2f, 3f);
+            UnityEngine.Debug.Log("!!! InstanceClass.StaticFunTest()" + v3.ToString());
         }
 
         public static void StaticFunTest2(int a)

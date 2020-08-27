@@ -1812,13 +1812,14 @@ namespace ILRuntime.Runtime.Intepreter
                                             {
                                                 var redirect = cm.Redirection;
                                                 if (redirect != null) {
-                                                    UnityEngine.Debug.LogError("重定向执行 " + cm.DeclearingType.FullName + "." + cm.Name);
+                                                    // UnityEngine.Debug.LogError("重定向执行 " + cm.DeclearingType.FullName + "." + cm.Name);
                                                     esp = redirect(this, esp, mStack, cm, false);
                                                 }
                                                 else
                                                 {
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
-                                                    UnityEngine.Debug.LogError("反射执行 " + cm.DeclearingType.FullName + "." + cm.Name);
+                                                    // 很奇怪，为什么热更中 值类型的比如Vector3, 或者DateTime等的构造函数 new Vector3()会在这里的cm.Name抛出异常，可能和值类型的特殊结构有关系吧
+                                                    // UnityEngine.Debug.LogError("反射执行 " + cm.DeclearingType.FullName + "." + cm.Name);
                                                     
                                                     if (!allowUnboundCLRMethod)
                                                         throw new NotSupportedException(cm.ToString() + " is not bound!");

@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace ILRuntime.Runtime.Enviorment
 {
-    public unsafe static class CLRRedirections
+    unsafe static class CLRRedirections
     {
         public static StackObject* CreateInstance(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
         {

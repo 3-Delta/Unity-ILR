@@ -138,21 +138,6 @@ public class DelegateDemo : MonoBehaviour
                 ((System.Action<float>)action)(a);
             });
         });
-        
-        // 方式1： 处理add_onLoaded
-        /*
-        foreach (var i in typeof(DelegateDemo).GetMethods()) {
-            // Debug.LogError(i.Name + "  " + i.IsSpecialName + "  " + (i.GetParameters().Length));
-            if (i.Name == "add_onLoaded" && i.GetParameters().Length == 1)
-            {
-                appdomain.RegisterCLRMethodRedirection(i, AddDelegate);
-            }
-        }
-        */
-
-        // 方式2： 处理add_onLoaded
-        MethodInfo mi = typeof(DelegateDemo).GetMethod("add_onLoaded", new Type[] {typeof(System.Action<int>)});
-        appdomain.RegisterCLRMethodRedirection(mi, AddDelegate);
     }
 
     void OnHotFixLoaded()
@@ -190,11 +175,5 @@ public class DelegateDemo : MonoBehaviour
             p.Close();
         fs = null;
         p = null;
-    }
-
-    public unsafe static StackObject* AddDelegate(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
-    {
-        Debug.LogError("here we go AddDelegate!");
-        return CLRRedirections.DelegateCombine(intp, esp, mStack, method, isNewObj);
     }
 }
