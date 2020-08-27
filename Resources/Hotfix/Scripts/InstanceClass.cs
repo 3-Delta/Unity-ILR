@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace HotFix
 {
@@ -30,6 +31,14 @@ namespace HotFix
             int a = 1;
             a += 2;
             UnityEngine.Debug.Log("!!! InstanceClass.StaticFunTest()" + a.ToString());
+        }
+
+        public static void StaticFUncTestDateTime() {
+            //DateTime time = new DateTime(1970, 1, 1, 0, 0, 0);
+            //time = time.AddSeconds(DateTime.Now.Second - 8 * 3600).ToLocalTime();
+            //UnityEngine.Debug.LogError(time);
+
+            UnityEngine.Vector3 v3 = new UnityEngine.Vector3(1f, 2f, 3f);
         }
 
         public static void StaticFunTest2(int a)

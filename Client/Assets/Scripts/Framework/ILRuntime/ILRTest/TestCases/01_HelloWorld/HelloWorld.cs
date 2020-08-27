@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 //下面这行为了取消使用WWW的警告，Unity2018以后推荐使用UnityWebRequest，处于兼容性考虑Demo依然使用WWW
 #pragma warning disable CS0618
@@ -73,13 +74,17 @@ public class HelloWorld : MonoBehaviour
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
         //这里做一些ILRuntime的注册，HelloWorld示例暂时没有需要注册的
+        ILRService.Init(appdomain);
     }
 
+    private bool hasLoaded = false;
     void OnHotFixLoaded()
     {
-        //HelloWorld，第一次方法调用
+        // HelloWorld，第一次方法调用
         appdomain.Invoke("HotFix.InstanceClass", "StaticFunTest", null, null);
-
+        
+        
+        hasLoaded = true;
     }
 
     private void OnDestroy()
@@ -94,6 +99,8 @@ public class HelloWorld : MonoBehaviour
 
     void Update()
     {
-
+        if (hasLoaded) {
+            appdomain.Invoke("HotFix.InstanceClass", "StaticFUncTestDateTime", null, null);
+        }
     }
 }

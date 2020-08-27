@@ -27,7 +27,7 @@ public static class ILRService
         appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
 #if UNITY_EDITOR
-        appDomain.DebugService.StartDebugService(56300);
+        appDomain.DebugService.StartDebugService(56000);
 #endif
     }
 
