@@ -399,6 +399,7 @@ namespace ILRuntime.Runtime.Generated
                 }
                 else 
                 {
+                    // 在stack中推入数组，参考自：CLRRedirections.EnumGetValues, 这里有推入数组的示例
                     List<ILTypeInstance> list = null;
                     // 因为所有DLL里面的MonoBehaviour实际都是这个MonoBehaviourAdapter.Adaptor，所以我们只能全取出来遍历查找
                     var clrInstances = instance_of_this_method.GetComponents<MonoBehaviourAdapter.Adaptor>();

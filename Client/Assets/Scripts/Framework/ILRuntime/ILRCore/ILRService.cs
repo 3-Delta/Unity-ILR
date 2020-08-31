@@ -47,6 +47,11 @@ public static class ILRService
         appDomain.RegisterValueTypeBinder(typeof(UnityEngine.Vector2), new Vector2Binder());
         appDomain.RegisterValueTypeBinder(typeof(UnityEngine.Vector3), new Vector3Binder());
         appDomain.RegisterValueTypeBinder(typeof(UnityEngine.Quaternion), new QuaternionBinder());
+        
+        // 后续项目新增
+        // appDomain.RegisterValueTypeBinder(typeof(UnityEngine.Color), new ColorBinder());
+        // appDomain.RegisterValueTypeBinder(typeof(DateTime), new DateTimeBinder());
+        // appDomain.RegisterValueTypeBinder(typeof(TimeSpan), new TimeSpanBinder());
     }
     private static void RegisterRedirection(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
     {
