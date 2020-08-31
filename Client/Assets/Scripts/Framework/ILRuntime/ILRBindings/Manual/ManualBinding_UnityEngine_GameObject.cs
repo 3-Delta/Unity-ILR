@@ -419,7 +419,7 @@ namespace ILRuntime.Runtime.Generated
                             }
                         }
                     }
-                    ret = list.ToArray();
+                    ret = list != null ? list.ToArray() : new ILTypeInstance[0];
                 }
                 return ILIntepreter.PushObject(__ret, __mStack, ret);
             }
@@ -472,7 +472,7 @@ namespace ILRuntime.Runtime.Generated
                             }
                         }
                     }
-                    ret = list.ToArray();
+                    ret = list != null ? list.ToArray() : new ILTypeInstance[0];
                 }
                 return ILIntepreter.PushObject(__ret, __mStack, ret);
             }
@@ -524,7 +524,7 @@ namespace ILRuntime.Runtime.Generated
                             }
                         }
                     }
-                    ret = list.ToArray();
+                    ret = list != null ? list.ToArray() : new ILTypeInstance[0];
                 }
                 return ILIntepreter.PushObject(__ret, __mStack, ret);
             }
@@ -573,7 +573,7 @@ namespace ILRuntime.Runtime.Generated
                             }
                         }
                     }
-                    ret = list.ToArray();
+                    ret = list != null ? list.ToArray() : new ILTypeInstance[0];
                 }
                 return ILIntepreter.PushObject(__ret, __mStack, ret);
             }
@@ -624,7 +624,7 @@ namespace ILRuntime.Runtime.Generated
                             }
                         }
                     }
-                    ret = list.ToArray();
+                    ret = list != null ? list.ToArray() : new ILTypeInstance[0];
                 }
                 return ILIntepreter.PushObject(__ret, __mStack, ret);
             }
