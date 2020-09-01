@@ -20,7 +20,7 @@ public class MonoBehaviourAdapterEditor : UnityEditor.UI.GraphicEditor
         var instance = clr.ILInstance;
         if (instance != null)
         {
-            EditorGUILayout.LabelField("Script", clr.ILInstance.Type.FullName);
+            EditorGUILayout.TextField("Script", clr.ILInstance.Type.FullName);
             
             int index = 0;
             foreach (var i in instance.Type.FieldMapping)
