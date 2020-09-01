@@ -4,7 +4,7 @@ using ILRuntime.Runtime.Intepreter;
 
 // 缺少：自动生成所有的delegate转换器
 // 自动生成所有的继承适配器
-// 参考：https://github.com/qq576067421/cshotfix
+// 参考： https://github.com/qq576067421/cshotfix
 public static class ILRService
 { 
     public static void Init(ILRuntime.Runtime.Enviorment.AppDomain appDomain)
