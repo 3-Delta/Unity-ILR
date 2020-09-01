@@ -187,3 +187,9 @@ Client/ProjectSettings/ProjectVersion.txt
 /Resources/Hotfix/ILRuntime/obj
 /Resources/Hotfix/ILRuntime/.vs
 /Resources/Hotfix/ILRuntime/bin
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Bindings/Analysis
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Bindings/Analysis.meta
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Adapters/Analysis.meta
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Adapters/Analysis
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Delegates/Analysis.meta
+/Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Delegates/Analysis

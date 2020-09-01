@@ -10,17 +10,17 @@ public static class ILRSettings
     /// <summary>
     /// 设定的自动生成的绑定脚本文件夹路径
     /// </summary>
-    public const string BindingAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRBindings/Analysis";
+    public const string BindingAnalysisFolderPath = "Assets/Scripts/Framework/Hotfix/ILRuntime/Bindings/Analysis";
     
     /// <summary>
     /// 设定的自动生成的delegate脚本文件夹路径
     /// </summary>
-    public const string DelegateAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRDelegates/Analysis";
+    public const string DelegateAnalysisFolderPath = "Assets/Scripts/Framework/Hotfix/ILRuntime/Delegates/Analysis";
     
     /// <summary>
     /// 设定的自动生成的适配脚本文件夹路径
     /// </summary>
-    public const string AdaptorAnalysisFolderPath = "Assets/Scripts/Framework/ILRuntime/ILRAdapters/Analysis";
+    public const string AdaptorAnalysisFolderPath = "Assets/Scripts/Framework/Hotfix/ILRuntime/Adapters/Analysis";
 
     public static string HotfixDllFullPath
     {
