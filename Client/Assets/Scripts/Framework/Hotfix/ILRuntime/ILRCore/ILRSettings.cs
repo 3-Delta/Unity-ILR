@@ -4,8 +4,8 @@ using UnityEngine;
 
 public static class ILRSettings
 {
-    public const string HotfixDLLRelativePath = "../../Resources/Hotfix/bin/Debug/Hotfix.dll";
-    public const string HotfixPdbRelativePath = "../../Resources/Hotfix/bin/Debug/Hotfix.pdb";
+    public const string HotfixDLLRelativePath = "../../Resources/Hotfix/ILRuntime/bin/Debug/Hotfix.dll";
+    public const string HotfixPdbRelativePath = "../../Resources/Hotfix/ILRuntime/bin/Debug/Hotfix.pdb";
     
     /// <summary>
     /// 设定的自动生成的绑定脚本文件夹路径

@@ -184,3 +184,6 @@ Client/ProjectSettings/ProjectVersion.txt
 /Client/Packages/manifest.json
 /Client/Packages/packages-lock.json
 /Client/*.csproj
+/Resources/Hotfix/ILRuntime/obj
+/Resources/Hotfix/ILRuntime/.vs
+/Resources/Hotfix/ILRuntime/bin

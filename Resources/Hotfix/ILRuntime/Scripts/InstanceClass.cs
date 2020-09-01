@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using UnityEngine;
+
 namespace HotFix {
     public class InstanceClass {
         private int id;
@@ -44,6 +46,12 @@ namespace HotFix {
 
         public static void StaticFunTest2(int a) {
             UnityEngine.Debug.Log("!!! InstanceClass.StaticFunTest2(), a=" + a);
+        }
+        public static void StaticFunTest3() 
+        {
+            Color color = new Color(1, 2, 3);
+            color = Color.red;
+            color.r = 3f;
         }
 
         public static void GenericMethod<T>(T a) {
