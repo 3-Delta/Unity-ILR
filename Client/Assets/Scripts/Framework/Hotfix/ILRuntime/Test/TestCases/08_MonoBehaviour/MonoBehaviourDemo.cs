@@ -96,6 +96,10 @@ public class MonoBehaviourDemo : MonoBehaviour
         
         ILRuntime.Runtime.Generated.CLRManualBindings.Initialize(appdomain);
         ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
+        
+#if UNITY_EDITOR
+        appdomain.DebugService.StartDebugService(56000);
+#endif
     }
 
     unsafe void OnHotFixLoaded()

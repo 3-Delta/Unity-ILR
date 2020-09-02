@@ -135,6 +135,8 @@ namespace ILRuntime.Runtime.Debugger
                         msg.MethodName = br.ReadString();
                         msg.StartLine = br.ReadInt32();
                         msg.EndLine = br.ReadInt32();
+                        
+                        // 绑定断点
                         TryBindBreakpoint(msg);
                     }
                     break;
