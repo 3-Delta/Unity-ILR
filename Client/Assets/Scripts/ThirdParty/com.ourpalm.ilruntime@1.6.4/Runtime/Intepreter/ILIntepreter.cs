@@ -1812,7 +1812,7 @@ namespace ILRuntime.Runtime.Intepreter
                                             {
                                                 var redirect = cm.Redirection;
                                                 if (redirect != null) {
-                                                    // 重定向执行
+                                                    // 重定向执行，newobj为false
                                                     esp = redirect(this, esp, mStack, cm, false);
                                                 }
                                                 else
@@ -2536,8 +2536,10 @@ namespace ILRuntime.Runtime.Intepreter
                                             else
                                             {
                                                 var redirect = cm.Redirection;
-                                                if (redirect != null)
+                                                if (redirect != null) {
+                                                    // 重定向newobj为true的情形
                                                     esp = redirect(this, esp, mStack, cm, true);
+                                                }
                                                 else
                                                 {
                                                     object result = cm.Invoke(this, esp, mStack, true);
