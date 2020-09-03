@@ -294,6 +294,7 @@ namespace ILRuntime.Runtime.Debugger
             }
         }
 
+        // 再解释器解释每一条il指令的时候，都去判断
         unsafe internal void CheckShouldBreak(ILMethod method, ILIntepreter intp, int ip)
         {
             if (server != null && server.IsAttached)

@@ -135,6 +135,8 @@ namespace ILRuntime.Runtime.Debugger
                         msg.MethodName = br.ReadString();
                         msg.StartLine = br.ReadInt32();
                         msg.EndLine = br.ReadInt32();
+                        
+                        // 绑定断点
                         TryBindBreakpoint(msg);
                     }
                     break;
@@ -152,6 +154,7 @@ namespace ILRuntime.Runtime.Debugger
                         ds.ExecuteThread(msg.ThreadHashCode);
                     }
                     break;
+                // 监听到F10, F11等调试指令之后，立即resume线程，然后继续CheckBreakPoint命中断点
                 case DebugMessageType.CSStep:
                     {
                         CSStep msg = new CSStep();
