@@ -140,45 +140,41 @@ namespace Services {
             _Handle(eventType, handler, toBeAdd);
         }
 
-        private static bool PreFire(T eventType) {
+        private static bool PreFire(T eventType, out DelegateList list) {
             if (delegates == null) {
+                list = null;
                 return false;
             }
 
-            return delegates.TryGetValue(eventType, out DelegateList _);
+            return delegates.TryGetValue(eventType, out list);
         }
 
         public static void Fire(T eventType) {
-            if (PreFire(eventType)) {
-                DelegateList list = delegates[eventType];
+            if (PreFire(eventType, out DelegateList list)) {
                 list?.Invoke();
             }
         }
 
         public static void Fire<T1>(T eventType, T1 arg) {
-            if (PreFire(eventType)) {
-                DelegateList list = delegates[eventType];
+            if (PreFire(eventType, out DelegateList list)) {
                 list.Invoke<T1>(arg);
             }
         }
 
         public static void Fire<T1, T2>(T eventType, T1 arg1, T2 arg2) {
-            if (PreFire(eventType)) {
-                DelegateList list = delegates[eventType];
+            if (PreFire(eventType, out DelegateList list)) {
                 list.Invoke<T1, T2>(arg1, arg2);
             }
         }
 
         public static void Fire<T1, T2, T3>(T eventType, T1 arg1, T2 arg2, T3 arg3) {
-            if (PreFire(eventType)) {
-                DelegateList list = delegates[eventType];
+            if (PreFire(eventType, out DelegateList list)) {
                 list.Invoke<T1, T2, T3>(arg1, arg2, arg3);
             }
         }
 
         public static void Fire<T1, T2, T3, T4>(T eventType, T1 arg1, T2 arg2, T3 arg3, T4 arg4) {
-            if (PreFire(eventType)) {
-                DelegateList list = delegates[eventType];
+            if (PreFire(eventType, out DelegateList list)) {
                 list.Invoke<T1, T2, T3, T4>(arg1, arg2, arg3, arg4);
             }
         }
