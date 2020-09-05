@@ -32,7 +32,9 @@ namespace Services {
 
         public DelegateList Invoke() {
             for (int i = 0, length = Count; i < length; ++i) {
-                delegates[i].DynamicInvoke();
+                // 强转是为了减少传递给params object[]的装箱消耗
+                // delegates[i].DynamicInvoke(arg); 
+                (delegates[i] as Action)?.Invoke();
             }
 
             return this;
@@ -40,9 +42,7 @@ namespace Services {
 
         public DelegateList Invoke<T>(T arg) {
             for (int i = 0, length = Count; i < length; ++i) {
-                // 强转是为了减少传递给params object[]的装箱消耗
-                // delegates[i].DynamicInvoke(arg);
-                (delegates[i] as Action<T>).Invoke(arg);
+                (delegates[i] as Action<T>)?.Invoke(arg);
             }
 
             return this;
@@ -50,7 +50,7 @@ namespace Services {
 
         public DelegateList Invoke<T1, T2>(T1 arg1, T2 arg2) {
             for (int i = 0, length = Count; i < length; ++i) {
-                (delegates[i] as Action<T1, T2>).Invoke(arg1, arg2);
+                (delegates[i] as Action<T1, T2>)?.Invoke(arg1, arg2);
             }
 
             return this;
@@ -58,7 +58,7 @@ namespace Services {
 
         public DelegateList Invoke<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3) {
             for (int i = 0, length = Count; i < length; ++i) {
-                (delegates[i] as Action<T1, T2, T3>).Invoke(arg1, arg2, arg3);
+                (delegates[i] as Action<T1, T2, T3>)?.Invoke(arg1, arg2, arg3);
             }
 
             return this;
@@ -66,7 +66,7 @@ namespace Services {
 
         public DelegateList Invoke<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4) {
             for (int i = 0, length = Count; i < length; ++i) {
-                (delegates[i] as Action<T1, T2, T3, T4>).Invoke(arg1, arg2, arg3, arg4);
+                (delegates[i] as Action<T1, T2, T3, T4>)?.Invoke(arg1, arg2, arg3, arg4);
             }
 
             return this;
@@ -74,8 +74,10 @@ namespace Services {
     }
 
     public static class DelegateService<T> {
-        private static Dictionary<T, DelegateList> delegates =
+        private static readonly Dictionary<T, DelegateList> delegates =
             new Dictionary<T, DelegateList>(EqualityComparer<T>.Default /*防止T是enum等的GetHashCode的装箱*/);
+
+        public static int Count => delegates.Count;
 
         private static void Add(T eventType, Delegate callback) {
             if (callback == null) {
