@@ -18,7 +18,7 @@ namespace Services {
         }
 
         public DelegateList Remove(Delegate callback) {
-            if (callback != null && delegates.Contains(callback)) {
+            if (callback != null) {
                 delegates.Remove(callback);
             }
 
@@ -110,6 +110,14 @@ namespace Services {
                     delegates.Remove(eventType);
                 }
             }
+        }
+
+        public static void Clear() {
+            foreach (var kvp in delegates) {
+                kvp.Value.Clear();
+            }
+
+            delegates.Clear();
         }
 
         // handle
