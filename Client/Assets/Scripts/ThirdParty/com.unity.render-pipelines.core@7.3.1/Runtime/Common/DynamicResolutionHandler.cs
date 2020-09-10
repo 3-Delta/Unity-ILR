@@ -26,7 +26,8 @@ namespace UnityEngine.Rendering
 
 
     /// <summary>
-    /// The class responsible to handle dynamic resolution. 
+    /// The class responsible to handle dynamic resolution.
+    /// 动态分辨率
     /// </summary>
     public class DynamicResolutionHandler
     {
@@ -156,6 +157,7 @@ namespace UnityEngine.Rendering
 
                 if (!m_ForceSoftwareFallback && type == DynamicResolutionType.Hardware)
                 {
+                    // 动态分辨率调整
                     ScalableBufferManager.ResizeBuffers(m_CurrentFraction, m_CurrentFraction);
                 }
 

@@ -51,6 +51,7 @@ namespace UnityEngine.Rendering
             maxPercentage = 100.0f,
             minPercentage = 100.0f,
             // It fall-backs to software when not supported, so it makes sense to have it on by default.
+            // 如果从硬件 fallback 到软件之后， 依然不支持， 则直接默认
             dynResType = DynamicResolutionType.Hardware,
             upsampleFilter = DynamicResUpscaleFilter.CatmullRom,
             forcedPercentage = 100.0f

@@ -468,16 +468,19 @@ namespace UnityEngine.Rendering
 
         /// <summary>
         /// Checks for duplicates in an array.
+        /// 数组先排序，然后前后两两比较，是否存在值相同的元素
         /// </summary>
         /// <param name="arr">Input array.</param>
         /// <returns>True if there is any duplicate in the input array.</returns>
         public static unsafe bool HaveDuplicates(int[] arr)
         {
+            // 栈式申请数组内存
             int* copy = stackalloc int[arr.Length];
             arr.CopyTo<int>(copy, arr.Length);
             QuickSort<int>(arr.Length, copy);
             for (int i = arr.Length - 1; i > 0; --i)
             {
+                // 底层直接是指针操作
                 if (UnsafeUtility.ReadArrayElement<int>(copy, i).CompareTo(UnsafeUtility.ReadArrayElement<int>(copy, i - 1)) == 0)
                 {
                     return true;

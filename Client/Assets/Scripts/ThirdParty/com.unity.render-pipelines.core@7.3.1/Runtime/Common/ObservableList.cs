@@ -6,6 +6,7 @@ namespace UnityEngine.Rendering
 {
     /// <summary>
     /// On List Changed Event Args.
+    /// 每次add/remove/set 数组元素的时候， 都会抛出事件通知的List
     /// </summary>
     /// <typeparam name="T">List type.</typeparam>
     public sealed class ListChangedEventArgs<T> : EventArgs
@@ -33,6 +34,7 @@ namespace UnityEngine.Rendering
 
     /// <summary>
     /// List changed event handler.
+    /// 提供一个sender, 一个index, 一个index对应的元素
     /// </summary>
     /// <typeparam name="T">List type.</typeparam>
     /// <param name="sender">Sender.</param>

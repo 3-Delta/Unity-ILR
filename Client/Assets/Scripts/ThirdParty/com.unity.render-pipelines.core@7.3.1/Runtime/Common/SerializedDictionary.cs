@@ -12,6 +12,7 @@ namespace UnityEngine.Rendering
     //
     /// <summary>
     /// Serialized Dictionary
+    /// unity不支持序列化字典,所以这里借助一些回调,辅助进行字典的序列化 : ISerializationCallbackReceiver
     /// </summary>
     /// <typeparam name="K">Key Type</typeparam>
     /// <typeparam name="V">Value Type</typeparam>
