@@ -161,6 +161,7 @@ namespace UnityEngine.Rendering
                 lastFrameMaxSize = new Vector2(GetMaxWidth(), GetMaxHeight());
             }
 
+            // 硬件分辨率
             if (DynamicResolutionHandler.instance.HardwareDynamicResIsEnabled())
             {
                 m_RTHandleProperties.rtHandleScale = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);

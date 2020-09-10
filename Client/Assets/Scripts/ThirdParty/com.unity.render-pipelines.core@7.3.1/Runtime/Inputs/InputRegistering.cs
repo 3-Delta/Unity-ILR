@@ -69,6 +69,7 @@ namespace UnityEngine
         public static void RegisterInputs(List<InputManagerEntry> entries)
         {
             // Grab reference to input manager
+            // 查找磁盘资源
             var assets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset");
             // Temporary fix. This happens some time with HDRP init when it's called before asset database is initialized (probably related to package load order).
             if (assets.Length == 0)
@@ -77,6 +78,7 @@ namespace UnityEngine
             var inputManager = assets[0];
 
             // Wrap in serialized object
+            // 设置为可序列化的对象
             var soInputManager = new SerializedObject(inputManager);
             var spAxes = soInputManager.FindProperty("m_Axes");
 
@@ -86,6 +88,7 @@ namespace UnityEngine
             }
 
             // Commit
+            // 应用修改
             soInputManager.ApplyModifiedProperties();
         }
     }
