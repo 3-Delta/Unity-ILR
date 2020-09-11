@@ -3,6 +3,7 @@ namespace UnityEngine.Rendering
     /// <summary>
     /// Bit depths of a Depth render texture.
     /// Some values may not be supported on all platforms.
+    /// 深度纹理bit枚举
     /// </summary>
     public enum DepthBits
     {

@@ -52,12 +52,20 @@ namespace UnityEngine.Rendering
         }
 
         // Parameters for auto-scaled Render Textures
+        // 硬件动态分辨率
         bool                m_HardwareDynamicResRequested = false;
+        // 是否支持MSAA
         bool                m_ScaledRTSupportsMSAA = false;
+        // rt采样方式
         MSAASamples         m_ScaledRTCurrentMSAASamples = MSAASamples.None;
+        
+        // ResizeMode.Auto的
         HashSet<RTHandle>   m_AutoSizedRTs;
         RTHandle[]          m_AutoSizedRTsArray; // For fast iteration
+        
+        // ResizeMode.OnDemand的
         HashSet<RTHandle>   m_ResizeOnDemandRTs;
+        
         RTHandleProperties  m_RTHandleProperties;
 
         /// <summary>
@@ -185,6 +193,7 @@ namespace UnityEngine.Rendering
             {
                 m_HardwareDynamicResRequested = enableHWDynamicRes;
 
+                // Release auto
                 for (int i = 0, c = m_AutoSizedRTsArray.Length; i < c; ++i)
                 {
                     var rth = m_AutoSizedRTsArray[i];

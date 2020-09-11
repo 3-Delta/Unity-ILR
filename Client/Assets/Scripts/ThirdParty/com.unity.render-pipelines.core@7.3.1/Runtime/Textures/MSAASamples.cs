@@ -2,6 +2,7 @@ namespace UnityEngine.Rendering
 {
     /// <summary>
     /// Number of MSAA samples.
+    /// 采样枚举
     /// </summary>
     public enum MSAASamples
     {

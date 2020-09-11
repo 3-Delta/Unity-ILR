@@ -27,6 +27,7 @@ namespace UnityEngine.Rendering
 
         /// <summary>
         /// Returns true if the RTHandle uses automatic scaling.
+        /// 自动缩放
         /// </summary>
         public bool                         useScaling { get; internal set; }
         /// <summary>
@@ -116,6 +117,7 @@ namespace UnityEngine.Rendering
 
         /// <summary>
         /// Return the input size, scaled by the RTHandle scale factor.
+        /// 控制缩放
         /// </summary>
         /// <param name="refSize">Input size</param>
         /// <returns>Input size scaled by the RTHandle scale factor.</returns>
