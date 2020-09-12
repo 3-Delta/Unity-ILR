@@ -4,6 +4,7 @@ namespace UnityEngine.Rendering
 {
     /// <summary>
     /// An implementation of Hable's artist-friendly tonemapping curve.
+    /// 色调映射曲线
     /// http://filmicworlds.com/blog/filmic-tonemapping-with-piecewise-power-curves/
     /// </summary>
     public class HableCurve

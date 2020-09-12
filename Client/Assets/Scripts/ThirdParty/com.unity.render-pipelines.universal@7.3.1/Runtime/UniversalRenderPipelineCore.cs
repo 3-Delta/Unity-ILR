@@ -8,6 +8,7 @@ using Lightmapping = UnityEngine.Experimental.GlobalIllumination.Lightmapping;
 
 namespace UnityEngine.Rendering.Universal
 {
+    // 混合光照设置
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum MixedLightingSetup
     {
         None,
@@ -15,6 +16,7 @@ namespace UnityEngine.Rendering.Universal
         Subtractive,
     };
 
+    // 渲染数据
     [MovedFrom("UnityEngine.Rendering.LWRP")] public struct RenderingData
     {
         public CullingResults cullResults;
@@ -22,28 +24,40 @@ namespace UnityEngine.Rendering.Universal
         public LightData lightData;
         public ShadowData shadowData;
         public PostProcessingData postProcessingData;
+        
+        // 动态批处理
         public bool supportsDynamicBatching;
         public PerObjectData perObjectData;
-        [Obsolete("killAlphaInFinalBlit is deprecated in the Universal Render Pipeline since it is no longer needed on any supported platform.")]
-        public bool killAlphaInFinalBlit;
 
         /// <summary>
         /// True if post-processing effect is enabled while rendering the camera stack.
+        /// 后处理是否开启
         /// </summary>
         public bool postProcessingEnabled;
+        
+        // 处理最终的renderTarget
         internal bool resolveFinalTarget;
     }
 
+    // 光照数据
     [MovedFrom("UnityEngine.Rendering.LWRP")] public struct LightData
     {
+        // 主光源下表
         public int mainLightIndex;
+        // 附加光源个数
         public int additionalLightsCount;
+        // 最大的 逐对象附加光源个数
         public int maxPerObjectAdditionalLightsCount;
+        // 可视化光源
         public NativeArray<VisibleLight> visibleLights;
+        // 逐顶点附加光源
         public bool shadeAdditionalLightsPerVertex;
+        
+        // 是否支持混合光照
         public bool supportsMixedLighting;
     }
 
+    // 相机数据
     [MovedFrom("UnityEngine.Rendering.LWRP")] public struct CameraData
     {
         public Camera camera;
@@ -92,6 +106,7 @@ namespace UnityEngine.Rendering.Universal
         internal ScriptableRenderer renderer;
     }
 
+    // 阴影数据
     [MovedFrom("UnityEngine.Rendering.LWRP")] public struct ShadowData
     {
         public bool supportsMainLightShadows;
@@ -108,12 +123,15 @@ namespace UnityEngine.Rendering.Universal
         public List<Vector4> bias;
     }
 
+    // 后处理数据
     public struct PostProcessingData
     {
+        // LDR/HDR
         public ColorGradingMode gradingMode;
         public int lutSize;
     }
 
+    // 相机depth排序
     class CameraDataComparer : IComparer<Camera>
     {
         public int Compare(Camera lhs, Camera rhs)

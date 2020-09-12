@@ -8,6 +8,7 @@ namespace UnityEngine.Rendering
     {
         /// <summary>
         /// Gets a deterministic sample in the Halton sequence.
+        /// 希尔顿序列，是一个完整的等间隔的区间划分
         /// </summary>
         /// <param name="index">The index in the sequence.</param>
         /// <param name="radix">The radix of the sequence.</param>

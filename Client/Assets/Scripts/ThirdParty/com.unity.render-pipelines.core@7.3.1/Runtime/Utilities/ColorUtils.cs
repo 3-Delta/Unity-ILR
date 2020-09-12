@@ -175,6 +175,7 @@ namespace UnityEngine.Rendering
         /// <summary>
         /// Returns the luminance of the specified color. The input is considered to be in linear
         /// space with sRGB primaries and a D65 white point.
+        /// 亮度/灰度公式
         /// </summary>
         /// <param name="color">The color to compute the luminance for.</param>
         /// <returns>A luminance value.</returns>
@@ -261,6 +262,7 @@ namespace UnityEngine.Rendering
 
         /// <summary>
         /// Converts a color value to its 32-bit hexadecimal representation.
+        /// 颜色转为uint
         /// </summary>
         /// <param name="c">The color to convert.</param>
         /// <returns>A 32-bit hexadecimal representation of the color.</returns>
@@ -268,6 +270,7 @@ namespace UnityEngine.Rendering
 
         /// <summary>
         /// Converts a 32-bit hexadecimal value to a color value.
+        /// uint转为颜色
         /// </summary>
         /// <param name="hex">A 32-bit hexadecimal value.</param>
         /// <returns>A color value.</returns>

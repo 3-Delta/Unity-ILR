@@ -62,6 +62,7 @@ namespace UnityEngine.Rendering
 
     /// <summary>
     /// Attribute specifying that HLSL code should be generated.
+    /// 生成HLSL的特性
     /// </summary>
     [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class | AttributeTargets.Enum)]
     public class GenerateHLSL : System.Attribute

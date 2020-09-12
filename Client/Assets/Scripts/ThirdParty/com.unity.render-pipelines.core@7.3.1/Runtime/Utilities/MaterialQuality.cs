@@ -67,6 +67,7 @@ namespace Utilities
 
         /// <summary>
         /// Returns the closest available quality level in a MaterialQuality bitfield.
+        /// 获取最接近的materialQuality
         /// </summary>
         /// <param name="availableLevels">Available MaterialQuality bitfield.</param>
         /// <param name="requestedLevel">Input MaterialQuality level.</param>
@@ -111,6 +112,7 @@ namespace Utilities
 
         /// <summary>
         /// Set the global keyword for the provided MaterialQuality.
+        /// 设置material的quality
         /// </summary>
         /// <param name="level">MaterialQuality level to set the keyword for.</param>
         public static void SetGlobalShaderKeywords(this MaterialQuality level)
@@ -126,6 +128,7 @@ namespace Utilities
 
         /// <summary>
         /// Set the global keyword for the provided MaterialQuality.
+        /// 设置material的quality
         /// </summary>
         /// <param name="level">MaterialQuality level to set the keyword for.</param>
         /// <param name="cmd">Command Buffer used to setup the keyword.</param>
