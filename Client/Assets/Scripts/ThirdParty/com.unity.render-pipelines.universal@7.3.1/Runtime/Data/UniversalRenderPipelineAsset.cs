@@ -69,8 +69,8 @@ namespace UnityEngine.Rendering.Universal
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum LightRenderingMode
     {
         Disabled = 0,
-        PerVertex = 2,
-        PerPixel = 1,
+        PerVertex = 2, // 逐顶点光源
+        PerPixel = 1,  // 逐像素光源
     }
 
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum ShaderVariantLogLevel

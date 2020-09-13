@@ -188,11 +188,8 @@ namespace UnityEngine.Rendering.Universal
                 requiresDepthPrepass = true;
 
             bool isRunningHololens = false;
-#if ENABLE_VR && ENABLE_VR_MODULE
-            isRunningHololens = UniversalRenderPipeline.IsRunningHololens(camera);
-#endif
             bool createColorTexture = RequiresIntermediateColorTexture(ref renderingData, cameraTargetDescriptor) ||
-                (rendererFeatures.Count != 0 && !isRunningHololens);
+                                      (rendererFeatures.Count != 0 && !isRunningHololens);
 
             // If camera requires depth and there's no depth pre-pass we create a depth texture that can be read later by effect requiring it.
             bool createDepthTexture = cameraData.requiresDepthTexture && !requiresDepthPrepass;

@@ -26,11 +26,15 @@ namespace UnityEngine.Rendering.Universal
 {
     public sealed partial class UniversalRenderPipeline : RenderPipeline
     {
+        // 每帧渲染buffer
         internal static class PerFrameBuffer
         {
+            // 光泽度环境光颜色
             public static int _GlossyEnvironmentColor;
+            // 阴影颜色
             public static int _SubtractiveShadowColor;
 
+            // 时间参数
             public static int _Time;
             public static int _SinTime;
             public static int _CosTime;
@@ -38,6 +42,7 @@ namespace UnityEngine.Rendering.Universal
             public static int _TimeParameters;
         }
 
+        // 每个相机buffer
         static internal class PerCameraBuffer
         {
             // TODO: This needs to account for stereo rendering
@@ -76,6 +81,7 @@ namespace UnityEngine.Rendering.Universal
         }
 
         // These limits have to match same limits in Input.hlsl
+        // shader storage buffer object
         const int k_MaxVisibleAdditionalLightsSSBO  = 256;
         const int k_MaxVisibleAdditionalLightsUBO   = 32;
         public static int maxVisibleAdditionalLights
@@ -101,6 +107,7 @@ namespace UnityEngine.Rendering.Universal
             }
         }
 
+        // 一个rpAsset最大的ScriptableRenderer个数
         // Internal max count for how many ScriptableRendererData can be added to a single Universal RP asset
         internal static int maxScriptableRenderers
         {
@@ -126,17 +133,13 @@ namespace UnityEngine.Rendering.Universal
             PerCameraBuffer._WorldSpaceCameraPos = Shader.PropertyToID("_WorldSpaceCameraPos");
 
             // Let engine know we have MSAA on for cases where we support MSAA backbuffer
+            // 修改内置pipeline的抗锯齿
             if (QualitySettings.antiAliasing != asset.msaaSampleCount)
             {
                 QualitySettings.antiAliasing = asset.msaaSampleCount;
-#if ENABLE_VR && ENABLE_VR_MODULE
-                XR.XRDevice.UpdateEyeTextureMSAASetting();
-#endif
             }
-
-#if ENABLE_VR && ENABLE_VR_MODULE
-            XRGraphics.eyeTextureResolutionScale = asset.renderScale;
-#endif
+            
+            // 全局pipeline tag标记
             // For compatibility reasons we also match old LightweightPipeline tag.
             Shader.globalRenderPipeline = "UniversalPipeline,LightweightPipeline";
 
@@ -162,63 +165,27 @@ namespace UnityEngine.Rendering.Universal
             CameraCaptureBridge.enabled = false;
         }
 
-#if ENABLE_VR && ENABLE_XR_MODULE
-        static List<XRDisplaySubsystem> xrDisplayList = new List<XRDisplaySubsystem>();
-        static bool xrSkipRender = false;
-        internal void SetupXRStates()
-        {
-            SubsystemManager.GetInstances(xrDisplayList);
-
-            if (xrDisplayList.Count > 0)
-            {
-                if (xrDisplayList.Count > 1)
-                    throw new NotImplementedException("Only 1 XR display is supported.");
-
-                XRDisplaySubsystem display = xrDisplayList[0];
-                if(display.GetRenderPassCount() == 0)
-                {
-                    // Disable XR rendering if display contains 0 renderpass
-                    if(!xrSkipRender)
-                    {
-                        xrSkipRender = true;
-                        Debug.Log("XR display is not ready. Skip XR rendering.");
-                    }
-                }
-                else
-                {
-                    // Enable XR rendering if display contains >0 renderpass
-                    if (xrSkipRender)
-                    {
-                        xrSkipRender = false;
-                        Debug.Log("XR display is ready. Start XR rendering.");
-                    }
-                }
-            }
-        }
-#endif
-
         protected override void Render(ScriptableRenderContext renderContext, Camera[] cameras)
         {
             BeginFrameRendering(renderContext, cameras);
 
+            // 线性光照计算
             GraphicsSettings.lightsUseLinearIntensity = (QualitySettings.activeColorSpace == ColorSpace.Linear);
+            // UrpBatcher
             GraphicsSettings.useScriptableRenderPipelineBatching = asset.useSRPBatcher;
             SetupPerFrameShaderConstants();
-#if ENABLE_VR && ENABLE_XR_MODULE
-            SetupXRStates();
-            if(xrSkipRender)
-                return;
-#endif
 
+            // 相机深度排序[每帧都排序:浪费, 应该只在depth改变或者camera个数变化的时候排序]
             SortCameras(cameras);
             for (int i = 0; i < cameras.Length; ++i)
             {
                 var camera = cameras[i];
                 if (IsGameCamera(camera))
                 {
+                    // gamecamera渲染stack
                     RenderCameraStack(renderContext, camera);
                 }
-                else
+                else // 其他类型的camera,RenderSingleCamera处理
                 {
                     BeginCameraRendering(renderContext, camera);
 #if VISUAL_EFFECT_GRAPH_0_0_1_OR_NEWER
@@ -260,6 +227,7 @@ namespace UnityEngine.Rendering.Universal
 
         /// <summary>
         /// Renders a single camera. This method will do culling, setup and execution of the renderer.
+        /// 核心函数
         /// </summary>
         /// <param name="context">Render context used to record commands during execution.</param>
         /// <param name="cameraData">Camera rendering data. This might contain data inherited from a base camera.</param>
@@ -275,9 +243,11 @@ namespace UnityEngine.Rendering.Universal
                 return;
             }
 
+            // 获取相机裁剪参数
             if (!camera.TryGetCullingParameters(IsStereoEnabled(camera), out var cullingParameters))
                 return;
 
+            // 相机相关matrix/shaderparams设置
             SetupPerCameraShaderConstants(cameraData);
 
             ProfilingSampler sampler = (asset.debugLevel >= PipelineDebugLevel.Profiling) ? new ProfilingSampler(camera.name): _CameraProfilingSampler;
@@ -318,17 +288,21 @@ namespace UnityEngine.Rendering.Universal
         /// <param name="camera">Camera to render.</param>
         static void RenderCameraStack(ScriptableRenderContext context, Camera baseCamera)
         {
-            baseCamera.TryGetComponent<UniversalAdditionalCameraData>(out var baseCameraAdditionalData);
+            baseCamera.TryGetComponent<UniversalAdditionalCameraData>(out UniversalAdditionalCameraData baseCameraAdditionalData);
 
+            // baseCameraAdditionalData == null 说明是内置管线,或者其他自定义管线
+            // 不处理overlay相机
             // Overlay cameras will be rendered stacked while rendering base cameras
             if (baseCameraAdditionalData != null && baseCameraAdditionalData.renderType == CameraRenderType.Overlay)
                 return;
 
+            // 相机堆叠处理
             // renderer contains a stack if it has additional data and the renderer supports stacking
             var renderer = baseCameraAdditionalData?.scriptableRenderer;
             bool supportsCameraStacking = renderer != null && renderer.supportedRenderingFeatures.cameraStacking;
             List<Camera> cameraStack = (supportsCameraStacking) ? baseCameraAdditionalData?.cameraStack : null;
 
+            // 后处理开启?
             bool anyPostProcessingEnabled = baseCameraAdditionalData != null && baseCameraAdditionalData.renderPostProcessing;
             anyPostProcessingEnabled &= SystemInfo.graphicsDeviceType != GraphicsDeviceType.OpenGLES2;
 
@@ -385,6 +359,7 @@ namespace UnityEngine.Rendering.Universal
             }
 
 
+            // 栈中是否有overlay相机渲染
             bool isStackedRendering = lastActiveOverlayCameraIndex != -1;
 
             BeginCameraRendering(context, baseCamera);
@@ -466,15 +441,18 @@ namespace UnityEngine.Rendering.Universal
 
             var stack = VolumeManager.instance.stack;
 
+            // 景深
             if (stack.GetComponent<DepthOfField>().IsActive())
                 return true;
 
+            // 运动模糊
             if (stack.GetComponent<MotionBlur>().IsActive())
                 return true;
 
             return false;
         }
 
+        // pipeline支持的features
         static void SetSupportedRenderingFeatures()
         {
 #if UNITY_EDITOR
@@ -490,6 +468,8 @@ namespace UnityEngine.Rendering.Universal
                 receiveShadows = false,
                 reflectionProbes = true
             };
+            
+            // 场景绘制模式
             SceneViewDrawMode.SetupDrawMode();
 #endif
         }
@@ -500,43 +480,6 @@ namespace UnityEngine.Rendering.Universal
             InitializeStackedCameraData(camera, additionalCameraData, ref cameraData);
             InitializeAdditionalCameraData(camera, additionalCameraData, ref cameraData);
         }
-
-#if ENABLE_VR && ENABLE_XR_MODULE
-        static List<XR.XRDisplaySubsystem> displaySubsystemList = new List<XR.XRDisplaySubsystem>();
-        static bool CanXRSDKUseSinglePass(Camera camera)
-        {
-            XR.XRDisplaySubsystem display = null;
-            SubsystemManager.GetInstances(displaySubsystemList);
-
-            if (displaySubsystemList.Count > 0)
-            {
-                XR.XRDisplaySubsystem.XRRenderPass renderPass;
-                display = displaySubsystemList[0];
-                if (display.GetRenderPassCount() > 0)
-                {
-                    display.GetRenderPass(0, out renderPass);
-
-                    if (renderPass.renderTargetDesc.dimension != TextureDimension.Tex2DArray)
-                        return false;
-
-                    if (renderPass.GetRenderParameterCount() != 2 || renderPass.renderTargetDesc.volumeDepth != 2)
-                        return false;
-
-                    renderPass.GetRenderParameter(camera, 0, out var renderParam0);
-                    renderPass.GetRenderParameter(camera, 1, out var renderParam1);
-
-                    if (renderParam0.textureArraySlice != 0 || renderParam1.textureArraySlice != 1)
-                        return false;
-
-                    if (renderParam0.viewport != renderParam1.viewport)
-                        return false;
-
-                    return true;
-                }
-            }
-            return false;
-        }
-#endif
 
         /// <summary>
         /// Initialize camera data settings common for all cameras in the stack. Overlay cameras will inherit
@@ -554,16 +497,7 @@ namespace UnityEngine.Rendering.Universal
 
             cameraData.numberOfXRPasses = 1;
             cameraData.isXRMultipass = false;
-
-#if ENABLE_VR && ENABLE_VR_MODULE
-            if (cameraData.isStereoEnabled && !cameraData.isSceneViewCamera &&
-                !CanXRSDKUseSinglePass(baseCamera) && XR.XRSettings.stereoRenderingMode == XR.XRSettings.StereoRenderingMode.MultiPass)
-            {
-                cameraData.numberOfXRPasses = 2;
-                cameraData.isXRMultipass = true;
-            }
-#endif
-
+            
             ///////////////////////////////////////////////////////////////////
             // Environment and Post-processing settings                       /
             ///////////////////////////////////////////////////////////////////
@@ -594,14 +528,14 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.antialiasing = AntialiasingMode.None;
                 cameraData.antialiasingQuality = AntialiasingQuality.High;
             }
-
-
+            
             ///////////////////////////////////////////////////////////////////
             // Settings that control output of the camera                     /
             ///////////////////////////////////////////////////////////////////
             int msaaSamples = 1;
             if (baseCamera.allowMSAA && settings.msaaSampleCount > 1)
                 msaaSamples = (baseCamera.targetTexture != null) ? baseCamera.targetTexture.antiAliasing : settings.msaaSampleCount;
+            // camera的hdr设置
             cameraData.isHdrEnabled = baseCamera.allowHDR && settings.supportsHDR;
 
             Rect cameraRect = baseCamera.rect;
@@ -620,12 +554,14 @@ namespace UnityEngine.Rendering.Universal
             cameraData.renderScale = (Mathf.Abs(1.0f - usedRenderScale) < kRenderScaleThreshold) ? 1.0f : usedRenderScale;
             var commonOpaqueFlags = SortingCriteria.CommonOpaque;
             var noFrontToBackOpaqueFlags = SortingCriteria.SortingLayer | SortingCriteria.RenderQueue | SortingCriteria.OptimizeStateChanges | SortingCriteria.CanvasOrder;
+            // 是否支持HSR
             bool hasHSRGPU = SystemInfo.hasHiddenSurfaceRemovalOnGPU;
             bool canSkipFrontToBackSorting = (baseCamera.opaqueSortMode == OpaqueSortMode.Default && hasHSRGPU) || baseCamera.opaqueSortMode == OpaqueSortMode.NoDistanceSort;
 
             cameraData.defaultOpaqueSortFlags = canSkipFrontToBackSorting ? noFrontToBackOpaqueFlags : commonOpaqueFlags;
             cameraData.captureActions = CameraCaptureBridge.GetCaptureActions(baseCamera);
 
+            // 需要alpha
             bool needsAlphaChannel = Graphics.preserveFramebufferAlpha;
             cameraData.cameraTargetDescriptor = CreateRenderTextureDescriptor(baseCamera, cameraData.renderScale,
                 cameraData.isStereoEnabled, cameraData.isHdrEnabled, msaaSamples, needsAlphaChannel);
@@ -642,6 +578,7 @@ namespace UnityEngine.Rendering.Universal
             var settings = asset;
             cameraData.camera = camera;
 
+            // 主光源阴影/附加光源阴影
             bool anyShadowsEnabled = settings.supportsMainLightShadows || settings.supportsAdditionalLightShadows;
             cameraData.maxShadowDistance = Mathf.Min(settings.shadowDistance, camera.farClipPlane);
             cameraData.maxShadowDistance = (anyShadowsEnabled && cameraData.maxShadowDistance >= camera.nearClipPlane) ?
@@ -668,6 +605,7 @@ namespace UnityEngine.Rendering.Universal
             else if (additionalCameraData != null)
             {
                 cameraData.renderType = additionalCameraData.renderType;
+                // 原来的clearflag
                 cameraData.clearDepth = (additionalCameraData.renderType != CameraRenderType.Base) ? additionalCameraData.clearDepth : true;
                 cameraData.postProcessEnabled = additionalCameraData.renderPostProcessing;
                 cameraData.maxShadowDistance = (additionalCameraData.renderShadows) ? cameraData.maxShadowDistance : 0.0f;
@@ -687,6 +625,7 @@ namespace UnityEngine.Rendering.Universal
 
             // Disable depth and color copy. We should add it in the renderer instead to avoid performance pitfalls
             // of camera stacking breaking render pass execution implicitly.
+            // overlay强制关闭depthTexture/opaqueTexture
             if (cameraData.renderType == CameraRenderType.Overlay)
             {
                 cameraData.requiresDepthTexture = false;
@@ -712,24 +651,27 @@ namespace UnityEngine.Rendering.Universal
             bool depthRequiredForPostFX = CheckPostProcessForDepth(cameraData);
 #endif
 
+            // 深度图depth
             cameraData.requiresDepthTexture |= cameraData.isSceneViewCamera || depthRequiredForPostFX;
         }
 
         static void InitializeRenderingData(UniversalRenderPipelineAsset settings, ref CameraData cameraData, ref CullingResults cullResults,
             bool requiresBlitToBackbuffer, bool anyPostProcessingEnabled, out RenderingData renderingData)
         {
+            // cullResults中获取裁剪之后作用的光源
             var visibleLights = cullResults.visibleLights;
 
             int mainLightIndex = GetMainLightIndex(settings, visibleLights);
             bool mainLightCastShadows = false;
             bool additionalLightsCastShadows = false;
-
             if (cameraData.maxShadowDistance > 0.0f)
             {
+                // 主光源:硬阴影/软阴影
                 mainLightCastShadows = (mainLightIndex != -1 && visibleLights[mainLightIndex].light != null &&
                                         visibleLights[mainLightIndex].light.shadows != LightShadows.None);
 
                 // If additional lights are shaded per-pixel they cannot cast shadows
+                // 从非主光源中寻找逐像素渲染
                 if (settings.additionalLightsRenderingMode == LightRenderingMode.PerPixel)
                 {
                     for (int i = 0; i < visibleLights.Length; ++i)
@@ -740,6 +682,7 @@ namespace UnityEngine.Rendering.Universal
                         Light light = visibleLights[i].light;
 
                         // UniversalRP doesn't support additional directional lights or point light shadows yet
+                        // urp暂时不支持 附加光源的 平行光/点光源 阴影
                         if (visibleLights[i].lightType == LightType.Spot && light != null && light.shadows != LightShadows.None)
                         {
                             additionalLightsCastShadows = true;
@@ -751,13 +694,14 @@ namespace UnityEngine.Rendering.Universal
 
             renderingData.cullResults = cullResults;
             renderingData.cameraData = cameraData;
+            
             InitializeLightData(settings, visibleLights, mainLightIndex, out renderingData.lightData);
             InitializeShadowData(settings, visibleLights, mainLightCastShadows, additionalLightsCastShadows && !renderingData.lightData.shadeAdditionalLightsPerVertex, out renderingData.shadowData);
             InitializePostProcessingData(settings, out renderingData.postProcessingData);
+            
             renderingData.supportsDynamicBatching = settings.supportsDynamicBatching;
             renderingData.perObjectData = GetPerObjectLightFlags(renderingData.lightData.additionalLightsCount);
-
-            bool isOffscreenCamera = cameraData.targetTexture != null && !cameraData.isSceneViewCamera;
+            
             renderingData.resolveFinalTarget = requiresBlitToBackbuffer;
             renderingData.postProcessingEnabled = anyPostProcessingEnabled;
         }
@@ -765,7 +709,6 @@ namespace UnityEngine.Rendering.Universal
         static void InitializeShadowData(UniversalRenderPipelineAsset settings, NativeArray<VisibleLight> visibleLights, bool mainLightCastShadows, bool additionalLightsCastShadows, out ShadowData shadowData)
         {
             m_ShadowBiasData.Clear();
-
             for (int i = 0; i < visibleLights.Length; ++i)
             {
                 Light light = visibleLights[i].light;
@@ -790,25 +733,28 @@ namespace UnityEngine.Rendering.Universal
 
             // We no longer use screen space shadows in URP.
             // This change allows us to have particles & transparent objects receive shadows.
-            shadowData.requiresScreenSpaceShadowResolve = false;// shadowData.supportsMainLightShadows && supportsScreenSpaceShadows && settings.shadowCascadeOption != ShadowCascadesOption.NoCascades;
+            // 不再使用屏幕空间阴影
+            // 允许 粒子/半透明 接受阴影
+            shadowData.requiresScreenSpaceShadowResolve = false;
+            // shadowData.supportsMainLightShadows && supportsScreenSpaceShadows && settings.shadowCascadeOption != ShadowCascadesOption.NoCascades;
 
+            // 阴影级联 个数
             int shadowCascadesCount;
             switch (settings.shadowCascadeOption)
             {
                 case ShadowCascadesOption.FourCascades:
                     shadowCascadesCount = 4;
                     break;
-
                 case ShadowCascadesOption.TwoCascades:
                     shadowCascadesCount = 2;
                     break;
-
                 default:
                     shadowCascadesCount = 1;
                     break;
             }
 
             shadowData.mainLightShadowCascadesCount = shadowCascadesCount;//(shadowData.requiresScreenSpaceShadowResolve) ? shadowCascadesCount : 1;
+            // 主光源 shadowmap 宽高
             shadowData.mainLightShadowmapWidth = settings.mainLightShadowmapResolution;
             shadowData.mainLightShadowmapHeight = settings.mainLightShadowmapResolution;
 
@@ -817,11 +763,9 @@ namespace UnityEngine.Rendering.Universal
                 case 1:
                     shadowData.mainLightShadowCascadesSplit = new Vector3(1.0f, 0.0f, 0.0f);
                     break;
-
                 case 2:
                     shadowData.mainLightShadowCascadesSplit = new Vector3(settings.cascade2Split, 1.0f, 0.0f);
                     break;
-
                 default:
                     shadowData.mainLightShadowCascadesSplit = settings.cascade4Split;
                     break;
@@ -829,16 +773,16 @@ namespace UnityEngine.Rendering.Universal
 
             shadowData.supportsAdditionalLightShadows = SystemInfo.supportsShadows && settings.supportsAdditionalLightShadows && additionalLightsCastShadows;
             shadowData.additionalLightsShadowmapWidth = shadowData.additionalLightsShadowmapHeight = settings.additionalLightsShadowmapResolution;
+            
+            // 软阴影
             shadowData.supportsSoftShadows = settings.supportsSoftShadows && (shadowData.supportsMainLightShadows || shadowData.supportsAdditionalLightShadows);
+            // cuiTodo:固定16?
             shadowData.shadowmapDepthBufferBits = 16;
         }
 
         static void InitializePostProcessingData(UniversalRenderPipelineAsset settings, out PostProcessingData postProcessingData)
         {
-            postProcessingData.gradingMode = settings.supportsHDR
-                ? settings.colorGradingMode
-                : ColorGradingMode.LowDynamicRange;
-
+            postProcessingData.gradingMode = settings.supportsHDR ? settings.colorGradingMode : ColorGradingMode.LowDynamicRange;
             postProcessingData.lutSize = settings.colorGradingLutSize;
         }
 
@@ -851,17 +795,21 @@ namespace UnityEngine.Rendering.Universal
 
             if (settings.additionalLightsRenderingMode != LightRenderingMode.Disabled)
             {
+                // 计算最终的附加光源的个数
                 lightData.additionalLightsCount =
                     Math.Min((mainLightIndex != -1) ? visibleLights.Length - 1 : visibleLights.Length,
                         maxVisibleAdditionalLights);
+                // 计算最终的 逐对象 附加光源的个数
                 lightData.maxPerObjectAdditionalLightsCount = Math.Min(settings.maxAdditionalLightsCount, maxPerObjectAdditionalLights);
             }
             else
             {
+                // 如果附加光源不进行 逐顶点/逐像素 渲染,则都为0
                 lightData.additionalLightsCount = 0;
                 lightData.maxPerObjectAdditionalLightsCount = 0;
             }
 
+            // 附加光源 要么逐顶点渲染,要么不渲染
             lightData.shadeAdditionalLightsPerVertex = settings.additionalLightsRenderingMode == LightRenderingMode.PerVertex;
             lightData.visibleLights = visibleLights;
             lightData.supportsMixedLighting = settings.supportsMixedLighting;
@@ -870,11 +818,9 @@ namespace UnityEngine.Rendering.Universal
         static PerObjectData GetPerObjectLightFlags(int additionalLightsCount)
         {
             var configuration = PerObjectData.ReflectionProbes | PerObjectData.Lightmaps | PerObjectData.LightProbe | PerObjectData.LightData | PerObjectData.OcclusionProbe;
-
             if (additionalLightsCount > 0)
             {
                 configuration |= PerObjectData.LightData;
-
                 // In this case we also need per-object indices (unity_LightIndices)
                 if (!RenderingUtils.useStructuredBuffer)
                     configuration |= PerObjectData.LightIndices;
@@ -887,7 +833,6 @@ namespace UnityEngine.Rendering.Universal
         static int GetMainLightIndex(UniversalRenderPipelineAsset settings, NativeArray<VisibleLight> visibleLights)
         {
             int totalVisibleLights = visibleLights.Length;
-
             if (totalVisibleLights == 0 || settings.mainLightRenderingMode != LightRenderingMode.PerPixel)
                 return -1;
 
@@ -899,15 +844,18 @@ namespace UnityEngine.Rendering.Universal
                 VisibleLight currVisibleLight = visibleLights[i];
                 Light currLight = currVisibleLight.light;
 
+                // 光源排序,粒子光源滞后,所以如果按照顺序找到某个light为null,那么说明之后的都是粒子光源,直接break
                 // Particle system lights have the light property as null. We sort lights so all particles lights
                 // come last. Therefore, if first light is particle light then all lights are particle lights.
                 // In this case we either have no main light or already found it.
                 if (currLight == null)
                     break;
 
+                // 主光源其实就是 RenderSettings.sun
                 if (currLight == sunLight)
                     return i;
 
+                // 找不到,则找最亮的平行光,作为主光源
                 // In case no shadow light is present we will return the brightest directional light
                 if (currVisibleLight.lightType == LightType.Directional && currLight.intensity > brightestLightIntensity)
                 {
@@ -925,8 +873,8 @@ namespace UnityEngine.Rendering.Universal
             SphericalHarmonicsL2 ambientSH = RenderSettings.ambientProbe;
             Color linearGlossyEnvColor = new Color(ambientSH[0, 0], ambientSH[1, 0], ambientSH[2, 0]) * RenderSettings.reflectionIntensity;
             Color glossyEnvColor = CoreUtils.ConvertLinearToActiveColorSpace(linearGlossyEnvColor);
+            
             Shader.SetGlobalVector(PerFrameBuffer._GlossyEnvironmentColor, glossyEnvColor);
-
             // Used when subtractive mode is selected
             Shader.SetGlobalVector(PerFrameBuffer._SubtractiveShadowColor, CoreUtils.ConvertSRGBToActiveColorSpace(RenderSettings.subtractiveShadowColor));
         }
@@ -936,17 +884,23 @@ namespace UnityEngine.Rendering.Universal
             Camera camera = cameraData.camera;
 
             Rect pixelRect = cameraData.pixelRect;
+            // 分辨率缩放
             float scaledCameraWidth = (float)pixelRect.width * cameraData.renderScale;
             float scaledCameraHeight = (float)pixelRect.height * cameraData.renderScale;
+            
             Shader.SetGlobalVector(PerCameraBuffer._ScaledScreenParams, new Vector4(scaledCameraWidth, scaledCameraHeight, 1.0f + 1.0f / scaledCameraWidth, 1.0f + 1.0f / scaledCameraHeight));
             Shader.SetGlobalVector(PerCameraBuffer._WorldSpaceCameraPos, camera.transform.position);
             float cameraWidth = (float)pixelRect.width;
             float cameraHeight = (float)pixelRect.height;
             Shader.SetGlobalVector(PerCameraBuffer._ScreenParams, new Vector4(cameraWidth, cameraHeight, 1.0f + 1.0f / cameraWidth, 1.0f + 1.0f / cameraHeight));
 
+            // p matrix
             Matrix4x4 projMatrix = GL.GetGPUProjectionMatrix(camera.projectionMatrix, false);
+            // v matrix
             Matrix4x4 viewMatrix = camera.worldToCameraMatrix;
+            // vp matrix
             Matrix4x4 viewProjMatrix = projMatrix * viewMatrix;
+            // inverse vp matrix
             Matrix4x4 invViewProjMatrix = Matrix4x4.Inverse(viewProjMatrix);
             Shader.SetGlobalMatrix(PerCameraBuffer._InvCameraViewProj, invViewProjMatrix);
         }

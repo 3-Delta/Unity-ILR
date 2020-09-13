@@ -46,9 +46,9 @@ namespace UnityEngine.Rendering.Universal
     public enum AntialiasingMode
     {
         None,
-        FastApproximateAntialiasing,
-        SubpixelMorphologicalAntiAliasing,
-        //TemporalAntialiasing
+        FastApproximateAntialiasing, // FSAA
+        SubpixelMorphologicalAntiAliasing,    // SMAA
+        //TemporalAntialiasing    // TAA
     }
 
     /// <summary>

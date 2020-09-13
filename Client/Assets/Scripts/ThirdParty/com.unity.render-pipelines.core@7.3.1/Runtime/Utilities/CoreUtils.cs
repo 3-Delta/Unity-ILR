@@ -764,22 +764,24 @@ namespace UnityEngine.Rendering
         // Color space utilities
         /// <summary>
         /// Converts the provided sRGB color to the current active color space.
+        /// 转换: 线性颜色/gamma颜色
         /// </summary>
         /// <param name="color">Input color.</param>
         /// <returns>Linear color if the active color space is ColorSpace.Linear, the original input otherwise.</returns>
-        public static Color ConvertSRGBToActiveColorSpace(Color color)
+        public static Color ConvertSRGBToActiveColorSpace(Color sRGBColor)
         {
-            return (QualitySettings.activeColorSpace == ColorSpace.Linear) ? color.linear : color;
+            return (QualitySettings.activeColorSpace == ColorSpace.Linear) ? sRGBColor.linear : sRGBColor;
         }
 
         /// <summary>
         /// Converts the provided linear color to the current active color space.
+        /// 转换: 线性颜色/gamma颜色
         /// </summary>
         /// <param name="color">Input color.</param>
         /// <returns>sRGB color if the active color space is ColorSpace.Gamma, the original input otherwise.</returns>
-        public static Color ConvertLinearToActiveColorSpace(Color color)
+        public static Color ConvertLinearToActiveColorSpace(Color linearColor)
         {
-            return (QualitySettings.activeColorSpace == ColorSpace.Linear) ? color : color.gamma;
+            return (QualitySettings.activeColorSpace == ColorSpace.Linear) ? linearColor : linearColor.gamma;
         }
 
         /// <summary>

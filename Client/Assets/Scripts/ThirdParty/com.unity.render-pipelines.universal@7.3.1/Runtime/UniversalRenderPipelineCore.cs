@@ -50,7 +50,7 @@ namespace UnityEngine.Rendering.Universal
         public int maxPerObjectAdditionalLightsCount;
         // 可视化光源
         public NativeArray<VisibleLight> visibleLights;
-        // 逐顶点附加光源
+        // 附加光源 逐顶点渲染 
         public bool shadeAdditionalLightsPerVertex;
         
         // 是否支持混合光照
@@ -64,10 +64,13 @@ namespace UnityEngine.Rendering.Universal
         public CameraRenderType renderType;
         public RenderTexture targetTexture;
         public RenderTextureDescriptor cameraTargetDescriptor;
+        
         // Internal camera data as we are not yet sure how to expose View in stereo context.
         // We might change this API soon.
+        // worldToCameraMatrix
         internal Matrix4x4 viewMatrix;
         internal Matrix4x4 projectionMatrix;
+        
         internal Rect pixelRect;
         internal int pixelWidth;
         internal int pixelHeight;
@@ -182,6 +185,7 @@ namespace UnityEngine.Rendering.Universal
 
     public sealed partial class UniversalRenderPipeline
     {
+        // 阴影偏移, 前两位是 shadow 深度/法线 偏移
         static List<Vector4> m_ShadowBiasData = new List<Vector4>();
 
         /// <summary>
@@ -199,6 +203,7 @@ namespace UnityEngine.Rendering.Universal
 
         /// <summary>
         /// Checks if a camera is rendering in stereo mode.
+        /// 立体相机,双眼模式
         /// </summary>
         /// <param name="camera">Camera to check state from.</param>
         /// <returns>Returns true if the given camera is rendering in stereo mode, false otherwise.</returns>
@@ -234,53 +239,10 @@ namespace UnityEngine.Rendering.Universal
             if (camera == null)
                 throw new ArgumentNullException("camera");
 
-#if ENABLE_VR && ENABLE_VR_MODULE
-            return IsStereoEnabled(camera) && !CanXRSDKUseSinglePass(camera) && XR.XRSettings.stereoRenderingMode == XR.XRSettings.StereoRenderingMode.MultiPass;
-#else
-            return false;
-#endif
-        }
-
-#if ENABLE_VR && ENABLE_VR_MODULE
-        static XR.XRDisplaySubsystem GetXRDisplaySubsystem()
-        {
-            XR.XRDisplaySubsystem display = null;
-            SubsystemManager.GetInstances(displaySubsystemList);
-
-            if (displaySubsystemList.Count > 0)
-                display = displaySubsystemList[0];
-
-            return display;
-        }
-
-        // NB: This method is required for a hotfix in Hololens to prevent creating a render texture when using a renderer
-        // with custom render pass.
-        // TODO: Remove this method and usages when we have proper dependency tracking in the pipeline to know
-        // when a render pass requires camera color as input.
-        internal static bool IsRunningHololens(Camera camera)
-        {
-#if PLATFORM_WINRT
-            if (IsStereoEnabled(camera))
-            {
-                var platform = Application.platform;
-                if (platform == RuntimePlatform.WSAPlayerX86 || platform == RuntimePlatform.WSAPlayerARM)
-                {
-                    var displaySubsystem = GetXRDisplaySubsystem();
-                    var subsystemDescriptor = displaySubsystem?.SubsystemDescriptor ?? null;
-                    string id = subsystemDescriptor?.id ?? "";
-
-                    if (id.Contains("Windows Mixed Reality Display"))
-                        return true;
-
-                    if (!XR.WSA.HolographicSettings.IsDisplayOpaque)
-                        return true;
-                }
-            }
-#endif
             return false;
         }
-#endif
 
+        // 相机深度排序
         void SortCameras(Camera[] cameras)
         {
             if (cameras.Length <= 1)
@@ -288,6 +250,7 @@ namespace UnityEngine.Rendering.Universal
             Array.Sort(cameras, new CameraDataComparer());
         }
 
+        // 大致根据camera创建RenderTextureDescriptor
         static RenderTextureDescriptor CreateRenderTextureDescriptor(Camera camera, float renderScale,
             bool isStereoEnabled, bool isHdrEnabled, int msaaSamples, bool needsAlpha)
         {
@@ -329,6 +292,7 @@ namespace UnityEngine.Rendering.Universal
                 desc.colorFormat = isHdrEnabled ? hdrFormat : renderTextureFormatDefault;
                 desc.depthBufferBits = 32;
                 desc.msaaSamples = msaaSamples;
+                // 如果是线性空间,就属于SRGB???
                 desc.sRGB = (QualitySettings.activeColorSpace == ColorSpace.Linear);
             }
 
