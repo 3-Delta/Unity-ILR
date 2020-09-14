@@ -5,7 +5,6 @@ namespace UnityEngine.Rendering.Universal
 {
     class ShaderData : IDisposable
     {
-        static ShaderData m_Instance = null;
         ComputeBuffer m_LightDataBuffer = null;
         ComputeBuffer m_LightIndicesBuffer = null;
 
@@ -16,6 +15,7 @@ namespace UnityEngine.Rendering.Universal
         {
         }
 
+        static ShaderData m_Instance = null;
         internal static ShaderData instance
         {
             get
