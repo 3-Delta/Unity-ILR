@@ -42,6 +42,7 @@ namespace UnityEngine.Experimental.Rendering.Universal
 using Real = System.Single;
 namespace LibTessDotNet
 {
+    // Vector3
     internal struct Vec3
     {
         public readonly static Vec3 Zero = new Vec3();
@@ -113,34 +114,34 @@ namespace LibTessDotNet
     {
         public const int Undef = ~0;
 
-            public abstract class Pooled<T> where T : Pooled<T>, new()
+        public abstract class Pooled<T> where T : Pooled<T>, new()
+        {
+            private static Stack<T> _stack;
+            public abstract void Reset();
+            public virtual void OnFree() { }
+
+            public static T Create()
             {
-                private static Stack<T> _stack;
-                public abstract void Reset();
-                public virtual void OnFree() { }
-
-                public static T Create()
+                if (_stack != null && _stack.Count > 0)
                 {
-                    if (_stack != null && _stack.Count > 0)
-                    {
-                        return _stack.Pop();
-                    }
-                    return new T();
+                    return _stack.Pop();
                 }
-
-                public void Free()
-                {
-                    OnFree();
-                    Reset();
-                    if (_stack == null)
-                    {
-                        _stack = new Stack<T>();
-                    }
-                    _stack.Push((T)this);
-                }
+                return new T();
             }
 
-            public class Vertex : Pooled<Vertex>
+            public void Free()
+            {
+                OnFree();
+                Reset();
+                if (_stack == null)
+                {
+                    _stack = new Stack<T>();
+                }
+                _stack.Push((T)this);
+            }
+        }
+
+        public class Vertex : Pooled<Vertex>
         {
             internal Vertex _prev, _next;
             internal Edge _anEdge;

@@ -1,15 +1,6 @@
 using System;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace UnityEngine.Rendering.LWRP
-{
-    [Obsolete("LWRP -> Universal (UnityUpgradable) -> UnityEngine.Rendering.Universal.UniversalRenderPipelineEditorResources", true)]
-    public class LightweightRenderPipelineEditorResources
-    {
-    }
-}
-
-
 namespace UnityEngine.Rendering.Universal
 {
     [MovedFrom("UnityEngine.Rendering.LWRP")] public class UniversalRenderPipelineEditorResources : ScriptableObject
@@ -55,6 +46,7 @@ namespace UnityEngine.Rendering.Universal
             public Material terrainLit;
         }
 
+        // 两个成员
         public ShaderResources shaders;
         public MaterialResources materials;
     }

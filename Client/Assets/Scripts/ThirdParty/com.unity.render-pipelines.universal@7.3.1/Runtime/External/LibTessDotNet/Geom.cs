@@ -60,6 +60,7 @@ namespace LibTessDotNet
             throw new Exception("Wrong winding rule");
         }
 
+        // 逆时针,叉积求取向量的左右关系,从而得知顺逆关系
         public static bool VertCCW(MeshUtils.Vertex u, MeshUtils.Vertex v, MeshUtils.Vertex w)
         {
             return (u._s * (v._t - w._t) + v._s * (w._t - u._t) + w._s * (u._t - v._t)) >= 0.0f;

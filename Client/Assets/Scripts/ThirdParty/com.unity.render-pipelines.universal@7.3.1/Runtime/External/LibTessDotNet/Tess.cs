@@ -36,9 +36,8 @@ using System.Diagnostics;
 
 namespace UnityEngine.Experimental.Rendering.Universal
 {
-
-using Real = System.Single;
-namespace LibTessDotNet
+    using Real = System.Single;
+    namespace LibTessDotNet
 {
     internal enum WindingRule
     {
@@ -746,5 +745,4 @@ namespace LibTessDotNet
         }
     }
 }
-
 }

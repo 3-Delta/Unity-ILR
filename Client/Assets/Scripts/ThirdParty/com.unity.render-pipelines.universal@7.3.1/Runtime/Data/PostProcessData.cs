@@ -11,6 +11,7 @@ namespace UnityEngine.Rendering.Universal
     {
 #if UNITY_EDITOR
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812")]
+        // EndNameEditAction是编辑名字的一些回调,类似于Input的字符变化event
         internal class CreatePostProcessDataAsset : EndNameEditAction
         {
             public override void Action(int instanceId, string pathName, string resourceFile)
@@ -96,6 +97,7 @@ namespace UnityEngine.Rendering.Universal
             public Texture2D smaaSearchTex;
         }
 
+        // 其实就: 两个成员
         public ShaderResources shaders;
         public TextureResources textures;
     }

@@ -7,17 +7,9 @@ using System.IO;
 #endif
 using System.ComponentModel;
 
-namespace UnityEngine.Rendering.LWRP
-{
-    [Obsolete("LWRP -> Universal (UnityUpgradable) -> UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset", true)]
-    public class LightweightRenderPipelineAsset
-    {
-    }
-}
-
-
 namespace UnityEngine.Rendering.Universal
 {
+    // 阴影级联
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum ShadowCascadesOption
     {
         NoCascades,
@@ -25,6 +17,7 @@ namespace UnityEngine.Rendering.Universal
         FourCascades,
     }
 
+    // 阴影种类
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum ShadowQuality
     {
         Disabled,
@@ -32,6 +25,7 @@ namespace UnityEngine.Rendering.Universal
         SoftShadows,
     }
 
+    // 阴影分辨率
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum ShadowResolution
     {
         _256 = 256,
@@ -41,6 +35,7 @@ namespace UnityEngine.Rendering.Universal
         _4096 = 4096
     }
 
+    // 抗锯齿质量
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum MsaaQuality
     {
         Disabled = 1,
@@ -49,6 +44,7 @@ namespace UnityEngine.Rendering.Universal
         _8x = 8
     }
 
+    // 降采样
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum Downsampling
     {
         None,
@@ -57,6 +53,7 @@ namespace UnityEngine.Rendering.Universal
         _4xBilinear
     }
 
+    // 默认材质类型
     internal enum DefaultMaterialType
     {
         Standard,
@@ -66,6 +63,7 @@ namespace UnityEngine.Rendering.Universal
         UnityBuiltinDefault
     }
 
+    // 光源渲染模式
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum LightRenderingMode
     {
         Disabled = 0,
@@ -73,6 +71,7 @@ namespace UnityEngine.Rendering.Universal
         PerPixel = 1,  // 逐像素光源
     }
 
+    // logLevel针对哪类shader
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum ShaderVariantLogLevel
     {
         Disabled,
@@ -86,6 +85,7 @@ namespace UnityEngine.Rendering.Universal
         Profiling,
     }
 
+    // 管线调试
     [MovedFrom("UnityEngine.Rendering.LWRP")] public enum RendererType
     {
         Custom,
@@ -129,15 +129,16 @@ namespace UnityEngine.Rendering.Universal
         /// The post-processing stack v2. This option only works if the package is installed in the
         /// project. Be aware that Unity plans to deprecate Post-processing V2 support for the
         /// Universal Render Pipeline in the near future.
+        /// 将来计划废弃PPV2
         /// </summary>
         PostProcessingV2
     }
 
+    // 对应UniversalRP-XXXQuality
+    // 比如: UniversalRP-HighQuality
     public class UniversalRenderPipelineAsset : RenderPipelineAsset, ISerializationCallbackReceiver
     {
-        Shader m_DefaultShader;
-        ScriptableRenderer[] m_Renderers = new ScriptableRenderer[1];
-
+        // URP版本升级辅助标记
         // Default values set when a new UniversalRenderPipeline asset is created
         [SerializeField] int k_AssetVersion = 5;
         [SerializeField] int k_AssetPreviousVersion = 5;
@@ -146,9 +147,16 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] RendererType m_RendererType = RendererType.ForwardRenderer;
         [EditorBrowsable(EditorBrowsableState.Never)]
         [SerializeField] internal ScriptableRendererData m_RendererData = null;
-
+        
+        Shader m_DefaultShader;
+        // 引用renderers
+        // 一个pileline中可以有多个Renderer,也就是一个pipeline可能即存在前向渲染,又存在延迟渲染
+        ScriptableRenderer[] m_Renderers = new ScriptableRenderer[1];
+        
         // Renderer settings
+        // 引用rendererDataAssets,同步m_Renderers
         [SerializeField] internal ScriptableRendererData[] m_RendererDataList = new ScriptableRendererData[1];
+        // 当前Renderer下标
         [SerializeField] internal int m_DefaultRendererIndex = 0;
 
         // General settings
@@ -170,6 +178,7 @@ namespace UnityEngine.Rendering.Universal
 
         // Additional lights settings
         [SerializeField] LightRenderingMode m_AdditionalLightsRenderingMode = LightRenderingMode.PerPixel;
+        // 每个对象收到的附加光源个数
         [SerializeField] int m_AdditionalLightsPerObjectLimit = 4;
         [SerializeField] bool m_AdditionalLightShadowsSupported = false;
         [SerializeField] ShadowResolution m_AdditionalLightsShadowmapResolution = ShadowResolution._512;
@@ -183,18 +192,18 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] float m_ShadowNormalBias = 1.0f;
         [SerializeField] bool m_SoftShadowsSupported = false;
 
-        // Advanced settings
-        [SerializeField] bool m_UseSRPBatcher = true;
-        [SerializeField] bool m_SupportsDynamicBatching = false;
-        [SerializeField] bool m_MixedLightingSupported = true;
-        [SerializeField] PipelineDebugLevel m_DebugLevel = PipelineDebugLevel.Disabled;
-
         // Post-processing settings
 #pragma warning disable 414 // 'field' is assigned but never used
         [SerializeField] PostProcessingFeatureSet m_PostProcessingFeatureSet = PostProcessingFeatureSet.Integrated;
 #pragma warning restore 414
         [SerializeField] ColorGradingMode m_ColorGradingMode = ColorGradingMode.LowDynamicRange;
         [SerializeField] int m_ColorGradingLutSize = 32;
+        
+        // Advanced settings
+        [SerializeField] bool m_UseSRPBatcher = true;
+        [SerializeField] bool m_SupportsDynamicBatching = false;
+        [SerializeField] bool m_MixedLightingSupported = true;
+        [SerializeField] PipelineDebugLevel m_DebugLevel = PipelineDebugLevel.Disabled;
 
         // Deprecated settings
         [SerializeField] ShadowQuality m_ShadowType = ShadowQuality.HardShadows;
@@ -260,15 +269,13 @@ namespace UnityEngine.Rendering.Universal
             return data;
         }
 
+        // 默认创建ForwardRendererData
         static ScriptableRendererData CreateRendererData(RendererType type)
         {
             switch (type)
             {
                 case RendererType.ForwardRenderer:
                     return CreateInstance<ForwardRendererData>();
-                // 2D renderer is experimental
-                case RendererType._2DRenderer:
-                    return CreateInstance<Experimental.Rendering.Universal.Renderer2DData>();
                 // Forward Renderer is the fallback renderer that works on all platforms
                 default:
                     return CreateInstance<ForwardRendererData>();
@@ -332,6 +339,7 @@ namespace UnityEngine.Rendering.Universal
 #endif
         }
 
+        // 这里创建最终的pipeline: UniversalRenderPipeline
         protected override RenderPipeline CreatePipeline()
         {
             if (m_RendererDataList == null)
@@ -350,7 +358,9 @@ namespace UnityEngine.Rendering.Universal
                 return null;
             }
 
+            // 创建rendererDataAssets对应的Renderer,比如前向renderer,延迟Renderer
             CreateRenderers();
+            // 核心创建
             return new UniversalRenderPipeline(this);
         }
 
@@ -378,6 +388,7 @@ namespace UnityEngine.Rendering.Universal
             base.OnDisable();
         }
 
+        // 从rendererData中获取数据创建
         void CreateRenderers()
         {
             m_Renderers = new ScriptableRenderer[m_RendererDataList.Length];
@@ -887,6 +898,7 @@ namespace UnityEngine.Rendering.Universal
             return System.Math.Max(0, System.Math.Min(value, UniversalRenderPipeline.maxPerObjectLights));
         }
 
+        // 矫正RendererScale
         float ValidateRenderScale(float value)
         {
             return Mathf.Max(UniversalRenderPipeline.minRenderScale, Mathf.Min(value, UniversalRenderPipeline.maxRenderScale));
@@ -900,16 +912,19 @@ namespace UnityEngine.Rendering.Universal
         internal bool ValidateRendererDataList(bool partial = false)
         {
             var emptyEntries = 0;
-            for (int i = 0; i < m_RendererDataList.Length; i++) emptyEntries += ValidateRendererData(i) ? 0 : 1;
+            for (int i = 0; i < m_RendererDataList.Length; i++)
+                emptyEntries += ValidateRendererData(i) ? 0 : 1;
             if (partial)
                 return emptyEntries == 0;
             return emptyEntries != m_RendererDataList.Length;
         }
 
+        // index对应的RendererData是否合理
         internal bool ValidateRendererData(int index)
         {
             // Check to see if you are asking for the default renderer
-            if (index == -1) index = m_DefaultRendererIndex;
+            if (index == -1)
+                index = m_DefaultRendererIndex;
             return index < m_RendererDataList.Length ? m_RendererDataList[index] != null : false;
         }
     }
