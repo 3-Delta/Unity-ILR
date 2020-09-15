@@ -62,7 +62,7 @@
 //
 // Precomputed matrices (pre-transposed)
 // See https://github.com/ampas/aces-dev/blob/master/transforms/ctl/README-MATRIX.md
-//
+// https://zhuanlan.zhihu.com/p/144775352  颜色空间的转换
 static const half3x3 sRGB_2_AP0 = {
     0.4397010, 0.3829780, 0.1773350,
     0.0897923, 0.8134230, 0.0967616,

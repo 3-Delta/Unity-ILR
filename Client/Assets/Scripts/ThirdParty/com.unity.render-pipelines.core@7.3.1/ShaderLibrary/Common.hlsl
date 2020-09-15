@@ -83,61 +83,62 @@
 #define REAL_IS_HALF 0
 #endif // Do we have half?
 
-#if REAL_IS_HALF
-#define real half
-#define real2 half2
-#define real3 half3
-#define real4 half4
-
-#define real2x2 half2x2
-#define real2x3 half2x3
-#define real3x2 half3x2
-#define real3x3 half3x3
-#define real3x4 half3x4
-#define real4x3 half4x3
-#define real4x4 half4x4
-
-#define half min16float
-#define half2 min16float2
-#define half3 min16float3
-#define half4 min16float4
-
-#define half2x2 min16float2x2
-#define half2x3 min16float2x3
-#define half3x2 min16float3x2
-#define half3x3 min16float3x3
-#define half3x4 min16float3x4
-#define half4x3 min16float4x3
-#define half4x4 min16float4x4
-
-#define REAL_MIN HALF_MIN
-#define REAL_MAX HALF_MAX
-#define REAL_EPS HALF_EPS
-#define TEMPLATE_1_REAL TEMPLATE_1_HALF
-#define TEMPLATE_2_REAL TEMPLATE_2_HALF
-#define TEMPLATE_3_REAL TEMPLATE_3_HALF
+// 定义基础类型
+#if REAL_IS_HALF 
+    #define real half
+    #define real2 half2
+    #define real3 half3
+    #define real4 half4
+    
+    #define real2x2 half2x2
+    #define real2x3 half2x3
+    #define real3x2 half3x2
+    #define real3x3 half3x3
+    #define real3x4 half3x4
+    #define real4x3 half4x3
+    #define real4x4 half4x4
+    
+    #define half min16float
+    #define half2 min16float2
+    #define half3 min16float3
+    #define half4 min16float4
+    
+    #define half2x2 min16float2x2
+    #define half2x3 min16float2x3
+    #define half3x2 min16float3x2
+    #define half3x3 min16float3x3
+    #define half3x4 min16float3x4
+    #define half4x3 min16float4x3
+    #define half4x4 min16float4x4
+    
+    #define REAL_MIN HALF_MIN
+    #define REAL_MAX HALF_MAX
+    #define REAL_EPS HALF_EPS
+    #define TEMPLATE_1_REAL TEMPLATE_1_HALF
+    #define TEMPLATE_2_REAL TEMPLATE_2_HALF
+    #define TEMPLATE_3_REAL TEMPLATE_3_HALF
 
 #else
-
-#define real float
-#define real2 float2
-#define real3 float3
-#define real4 float4
-
-#define real2x2 float2x2
-#define real2x3 float2x3
-#define real3x2 float3x2
-#define real3x3 float3x3
-#define real3x4 float3x4
-#define real4x3 float4x3
-#define real4x4 float4x4
-
-#define REAL_MIN FLT_MIN
-#define REAL_MAX FLT_MAX
-#define REAL_EPS FLT_EPS
-#define TEMPLATE_1_REAL TEMPLATE_1_FLT
-#define TEMPLATE_2_REAL TEMPLATE_2_FLT
-#define TEMPLATE_3_REAL TEMPLATE_3_FLT
+    // pc上都是float,没有half
+    #define real float
+    #define real2 float2
+    #define real3 float3
+    #define real4 float4
+    
+    #define real2x2 float2x2
+    #define real2x3 float2x3
+    #define real3x2 float3x2
+    #define real3x3 float3x3
+    #define real3x4 float3x4
+    #define real4x3 float4x3
+    #define real4x4 float4x4
+    
+    #define REAL_MIN FLT_MIN
+    #define REAL_MAX FLT_MAX
+    #define REAL_EPS FLT_EPS
+    #define TEMPLATE_1_REAL TEMPLATE_1_FLT
+    #define TEMPLATE_2_REAL TEMPLATE_2_FLT
+    #define TEMPLATE_3_REAL TEMPLATE_3_FLT
 
 #endif // REAL_IS_HALF
 
@@ -188,29 +189,29 @@
 
 // Error on GLES2 undefined functions
 #ifdef SHADER_API_GLES
-#define BitFieldExtract ERROR_ON_UNSUPPORTED_FUNCTION(BitFieldExtract)
-#define IsBitSet ERROR_ON_UNSUPPORTED_FUNCTION(IsBitSet)
-#define SetBit ERROR_ON_UNSUPPORTED_FUNCTION(SetBit)
-#define ClearBit ERROR_ON_UNSUPPORTED_FUNCTION(ClearBit)
-#define ToggleBit ERROR_ON_UNSUPPORTED_FUNCTION(ToggleBit)
-#define FastMulBySignOfNegZero ERROR_ON_UNSUPPORTED_FUNCTION(FastMulBySignOfNegZero)
-#define LODDitheringTransition ERROR_ON_UNSUPPORTED_FUNCTION(LODDitheringTransition)
+    #define BitFieldExtract ERROR_ON_UNSUPPORTED_FUNCTION(BitFieldExtract)
+    #define IsBitSet ERROR_ON_UNSUPPORTED_FUNCTION(IsBitSet)
+    #define SetBit ERROR_ON_UNSUPPORTED_FUNCTION(SetBit)
+    #define ClearBit ERROR_ON_UNSUPPORTED_FUNCTION(ClearBit)
+    #define ToggleBit ERROR_ON_UNSUPPORTED_FUNCTION(ToggleBit)
+    #define FastMulBySignOfNegZero ERROR_ON_UNSUPPORTED_FUNCTION(FastMulBySignOfNegZero)
+    #define LODDitheringTransition ERROR_ON_UNSUPPORTED_FUNCTION(LODDitheringTransition)
 #endif
 
 // On everything but GCN consoles we error on cross-lane operations
 #ifndef PLATFORM_SUPPORTS_WAVE_INTRINSICS
-#define WaveActiveAllTrue ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveAllTrue)
-#define WaveActiveAnyTrue ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveAnyTrue)
-#define WaveGetLaneIndex ERROR_ON_UNSUPPORTED_FUNCTION(WaveGetLaneIndex)
-#define WaveIsFirstLane ERROR_ON_UNSUPPORTED_FUNCTION(WaveIsFirstLane)
-#define GetWaveID ERROR_ON_UNSUPPORTED_FUNCTION(GetWaveID)
-#define WaveActiveMin ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveMin)
-#define WaveActiveMax ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveMax)
-#define WaveActiveBallot ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBallot)
-#define WaveActiveSum ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveSum)
-#define WaveActiveBitAnd ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBitAnd)
-#define WaveActiveBitOr ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBitOr)
-#define WaveGetLaneCount ERROR_ON_UNSUPPORTED_FUNCTION(WaveGetLaneCount)
+    #define WaveActiveAllTrue ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveAllTrue)
+    #define WaveActiveAnyTrue ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveAnyTrue)
+    #define WaveGetLaneIndex ERROR_ON_UNSUPPORTED_FUNCTION(WaveGetLaneIndex)
+    #define WaveIsFirstLane ERROR_ON_UNSUPPORTED_FUNCTION(WaveIsFirstLane)
+    #define GetWaveID ERROR_ON_UNSUPPORTED_FUNCTION(GetWaveID)
+    #define WaveActiveMin ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveMin)
+    #define WaveActiveMax ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveMax)
+    #define WaveActiveBallot ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBallot)
+    #define WaveActiveSum ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveSum)
+    #define WaveActiveBitAnd ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBitAnd)
+    #define WaveActiveBitOr ERROR_ON_UNSUPPORTED_FUNCTION(WaveActiveBitOr)
+    #define WaveGetLaneCount ERROR_ON_UNSUPPORTED_FUNCTION(WaveGetLaneCount)
 #endif
 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonDeprecated.hlsl"
@@ -415,6 +416,7 @@ float SanitizePositiveFinite(float x)
 // Common math functions
 // ----------------------------------------------------------------------------
 
+// 角度/弧度转换
 real DegToRad(real deg)
 {
     return deg * (PI / 180.0);
@@ -429,6 +431,7 @@ real RadToDeg(real rad)
 TEMPLATE_1_REAL(Sq, x, return (x) * (x))
 TEMPLATE_1_INT(Sq, x, return (x) * (x))
 
+// 2的幂次方
 bool IsPower2(uint x)
 {
     return (x & (x - 1)) == 0;
@@ -687,7 +690,7 @@ float3 LatlongToDirectionCoordinate(float2 coord)
 }
 
 // ----------------------------------------------------------------------------
-// Depth encoding/decoding
+// Depth encoding/decoding 深度转换
 // ----------------------------------------------------------------------------
 
 // Z buffer to linear 0..1 depth (0 at near plane, 1 at far plane).
@@ -893,6 +896,7 @@ float3 ComputeWorldSpacePosition(float2 positionNDC, float deviceDepth, float4x4
 // ----------------------------------------------------------------------------
 
 // Note: if you modify this struct, be sure to update the CustomPassFullscreenShader.template
+// 坐标转换结构体
 struct PositionInputs
 {
     float3 positionWS;  // World space position (could be camera-relative)

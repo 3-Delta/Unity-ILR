@@ -53,6 +53,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
             LightConstantBuffer._MainLightPosition = Shader.PropertyToID("_MainLightPosition");
             LightConstantBuffer._MainLightColor = Shader.PropertyToID("_MainLightColor");
+            
             LightConstantBuffer._AdditionalLightsCount = Shader.PropertyToID("_AdditionalLightsCount");
 
             if (m_UseStructuredBuffer)
@@ -84,13 +85,10 @@ namespace UnityEngine.Rendering.Universal.Internal
             CommandBuffer cmd = CommandBufferPool.Get(k_SetupLightConstants);
             SetupShaderLightConstants(cmd, ref renderingData);
 
-            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.AdditionalLightsVertex,
-                additionalLightsCount > 0 && additionalLightsPerVertex);
-            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.AdditionalLightsPixel,
-                additionalLightsCount > 0 && !additionalLightsPerVertex);
-            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.MixedLightingSubtractive,
-                renderingData.lightData.supportsMixedLighting &&
-                m_MixedLightingSetup == MixedLightingSetup.Subtractive);
+            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.AdditionalLightsVertex, additionalLightsCount > 0 && additionalLightsPerVertex);
+            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.AdditionalLightsPixel, additionalLightsCount > 0 && !additionalLightsPerVertex);
+            CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.MixedLightingSubtractive, renderingData.lightData.supportsMixedLighting && m_MixedLightingSetup == MixedLightingSetup.Subtractive);
+            
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
         }
@@ -238,9 +236,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                         if (lightData.mainLightIndex != i)
                         {
                             ShaderInput.LightData data;
-                            InitializeLightConstants(lights, i,
-                                out data.position, out data.color, out data.attenuation,
-                                out data.spotDirection, out data.occlusionProbeChannels);
+                            InitializeLightConstants(lights, i, out data.position, out data.color, out data.attenuation, out data.spotDirection, out data.occlusionProbeChannels);
                             additionalLightsData[lightIter] = data;
                             lightIter++;
                         }

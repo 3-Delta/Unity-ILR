@@ -30,7 +30,7 @@ namespace UnityEngine.Rendering.Universal
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, CreateInstance<CreateForwardRendererAsset>(), "CustomForwardRendererData.asset", null, null);
         }
 #endif
-
+        
         [Serializable, ReloadGroup]
         public sealed class ShaderResources
         {
@@ -50,15 +50,22 @@ namespace UnityEngine.Rendering.Universal
             public Shader fallbackErrorPS;
         }
 
+        // Post Process
         [Reload("Runtime/Data/PostProcessData.asset")]
         public PostProcessData postProcessData = null;
 
-        public ShaderResources shaders = null;
-
+        // Filter
         [SerializeField] LayerMask m_OpaqueLayerMask = -1;
         [SerializeField] LayerMask m_TransparentLayerMask = -1;
+        
+        // Stencil
         [SerializeField] StencilStateData m_DefaultStencilState = new StencilStateData();
+        
+        // Shadow settings
         [SerializeField] bool m_ShadowTransparentReceive = true;
+        
+        // Shaders
+        public ShaderResources shaders = null;
 
         protected override ScriptableRenderer Create()
         {

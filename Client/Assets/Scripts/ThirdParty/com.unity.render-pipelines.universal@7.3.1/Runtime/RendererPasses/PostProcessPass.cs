@@ -219,6 +219,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
         bool RequireSRGBConversionBlitToBackBuffer(CameraData cameraData)
         {
+            // 判断显示器是否需要进行SRGB转换
             bool requiresSRGBConversion = Display.main.requiresSrgbBlitToBackbuffer;
             // For stereo case, eye texture always want color data in sRGB space.
             // If eye texture color format is linear, we do explicit sRGB convertion

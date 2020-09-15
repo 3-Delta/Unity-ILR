@@ -20,6 +20,7 @@ real3 Gamma20ToLinear(real3 c)
 
 real4 Gamma20ToLinear(real4 c)
 {
+    // alpha不变 
     return real4(Gamma20ToLinear(c.rgb), c.a);
 }
 
@@ -56,6 +57,7 @@ real4 Gamma22ToLinear(real4 c)
 
 real LinearToGamma22(real c)
 {
+    // 1/202 == 0.45  
     return PositivePow(c, 0.454545454545455);
 }
 
@@ -70,6 +72,7 @@ real4 LinearToGamma22(real4 c)
 }
 
 // sRGB
+// todo: why ??? 
 real SRGBToLinear(real c)
 {
     real linearRGBLo  = c / 12.92;
@@ -176,6 +179,7 @@ real4 FastLinearToSRGB(real4 c)
 
 // Convert rgb to luminance
 // with rgb in linear space with sRGB primaries and D65 white point
+// 亮度
 real Luminance(real3 linearRgb)
 {
     return dot(linearRgb, real3(0.2126729, 0.7151522, 0.0721750));

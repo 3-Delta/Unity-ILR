@@ -41,7 +41,7 @@ bool SolveQuadraticEquation(float a, float b, float c, out float2 roots)
 }
 
 //-----------------------------------------------------------------------------
-// Intersection functions
+// Intersection functions  碰撞检测
 //-----------------------------------------------------------------------------
 
 bool IntersectRayAABB(float3 rayOrigin, float3 rayDirection,

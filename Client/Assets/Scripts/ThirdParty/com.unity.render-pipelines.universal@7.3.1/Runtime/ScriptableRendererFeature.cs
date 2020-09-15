@@ -26,6 +26,7 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         /// <param name="renderPasses">List of render passes to add to.</param>
         /// <param name="renderingData">Rendering state. Use this to setup render passes.</param>
+        /// Feature子类中有很多的自定义的Pass
         public abstract void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData);
 
         void OnEnable()

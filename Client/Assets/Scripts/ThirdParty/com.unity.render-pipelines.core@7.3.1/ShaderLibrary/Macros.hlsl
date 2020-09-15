@@ -9,15 +9,15 @@
 // These define are use to abstract the way we sample into a cubemap array.
 // Some platform don't support cubemap array so we fallback on 2D latlong
 #ifdef  UNITY_NO_CUBEMAP_ARRAY
-#define TEXTURECUBE_ARRAY_ABSTRACT TEXTURE2D_ARRAY
-#define TEXTURECUBE_ARRAY_PARAM_ABSTRACT TEXTURE2D_ARRAY_PARAM
-#define TEXTURECUBE_ARRAY_ARGS_ABSTRACT TEXTURE2D_ARRAY_ARGS
-#define SAMPLE_TEXTURECUBE_ARRAY_LOD_ABSTRACT(textureName, samplerName, coord3, index, lod) SAMPLE_TEXTURE2D_ARRAY_LOD(textureName, samplerName, DirectionToLatLongCoordinate(coord3), index, lod)
+    #define TEXTURECUBE_ARRAY_ABSTRACT TEXTURE2D_ARRAY
+    #define TEXTURECUBE_ARRAY_PARAM_ABSTRACT TEXTURE2D_ARRAY_PARAM
+    #define TEXTURECUBE_ARRAY_ARGS_ABSTRACT TEXTURE2D_ARRAY_ARGS
+    #define SAMPLE_TEXTURECUBE_ARRAY_LOD_ABSTRACT(textureName, samplerName, coord3, index, lod) SAMPLE_TEXTURE2D_ARRAY_LOD(textureName, samplerName, DirectionToLatLongCoordinate(coord3), index, lod)
 #else
-#define TEXTURECUBE_ARRAY_ABSTRACT TEXTURECUBE_ARRAY
-#define TEXTURECUBE_ARRAY_PARAM_ABSTRACT TEXTURECUBE_ARRAY_PARAM
-#define TEXTURECUBE_ARRAY_ARGS_ABSTRACT TEXTURECUBE_ARRAY_ARGS
-#define SAMPLE_TEXTURECUBE_ARRAY_LOD_ABSTRACT(textureName, samplerName, coord3, index, lod) SAMPLE_TEXTURECUBE_ARRAY_LOD(textureName, samplerName, coord3, index, lod)
+    #define TEXTURECUBE_ARRAY_ABSTRACT TEXTURECUBE_ARRAY
+    #define TEXTURECUBE_ARRAY_PARAM_ABSTRACT TEXTURECUBE_ARRAY_PARAM
+    #define TEXTURECUBE_ARRAY_ARGS_ABSTRACT TEXTURECUBE_ARRAY_ARGS
+    #define SAMPLE_TEXTURECUBE_ARRAY_LOD_ABSTRACT(textureName, samplerName, coord3, index, lod) SAMPLE_TEXTURECUBE_ARRAY_LOD(textureName, samplerName, coord3, index, lod)
 #endif
 
 #define PI          3.14159265358979323846
@@ -223,6 +223,7 @@
 
 // MACRO from Legacy Untiy
 // Transforms 2D UV by scale/bias property
+// 纹理坐标转换计算
 #define TRANSFORM_TEX(tex, name) ((tex.xy) * name##_ST.xy + name##_ST.zw)
 #define GET_TEXELSIZE_NAME(name) (name##_TexelSize)
 

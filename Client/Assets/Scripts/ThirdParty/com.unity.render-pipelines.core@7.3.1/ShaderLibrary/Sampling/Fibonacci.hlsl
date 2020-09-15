@@ -12,7 +12,9 @@ real2 Fibonacci2dSeq(real fibN1, real fibN2, uint i)
     return real2(i / fibN1 + (0.5 / fibN1), frac(i * (fibN2 / fibN1)));
 }
 
+// 黄金分割比
 #define GOLDEN_RATIO 1.61803
+// 黄金角: GoldenAngle = 2 * Pi * (1 - 1 / GoldenRatio).
 #define GOLDEN_ANGLE 2.39996
 
 // Replaces the Fibonacci sequence in Fibonacci2dSeq() with the Golden ratio.

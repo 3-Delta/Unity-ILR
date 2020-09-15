@@ -33,6 +33,7 @@
 #define BUMP_SCALE_NOT_SUPPORTED !SHADER_HINT_NICE_QUALITY
 #endif
 
+// 顶点坐标输入
 struct VertexPositionInputs
 {
     float3 positionWS; // World space position
@@ -41,6 +42,7 @@ struct VertexPositionInputs
     float4 positionNDC;// Homogeneous normalized device coordinates
 };
 
+// 顶点法线输入
 struct VertexNormalInputs
 {
     real3 tangentWS;

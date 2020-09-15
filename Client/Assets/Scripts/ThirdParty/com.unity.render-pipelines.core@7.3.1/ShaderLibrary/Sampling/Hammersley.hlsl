@@ -2,6 +2,7 @@
 #define UNITY_HAMMERSLEY_INCLUDED
 
 // Ref: http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
+// https://blog.csdn.net/i_dovelemon/article/details/76599923 二进制逆向计算
 uint ReverseBits32(uint bits)
 {
 #if (SHADER_TARGET >= 45)
