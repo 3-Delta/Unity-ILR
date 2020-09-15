@@ -589,6 +589,7 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.postProcessEnabled = CoreUtils.ArePostProcessesEnabled(camera);
                 cameraData.requiresDepthTexture = settings.supportsCameraDepthTexture;
                 cameraData.requiresOpaqueTexture = settings.supportsCameraOpaqueTexture;
+                // 设置renderer
                 cameraData.renderer = asset.scriptableRenderer;
             }
             else if (additionalCameraData != null)
@@ -600,6 +601,7 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.maxShadowDistance = (additionalCameraData.renderShadows) ? cameraData.maxShadowDistance : 0.0f;
                 cameraData.requiresDepthTexture = additionalCameraData.requiresDepthTexture;
                 cameraData.requiresOpaqueTexture = additionalCameraData.requiresColorTexture;
+                // 设置renderer
                 cameraData.renderer = additionalCameraData.scriptableRenderer;
             }
             else
@@ -609,6 +611,7 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.postProcessEnabled = false;
                 cameraData.requiresDepthTexture = settings.supportsCameraDepthTexture;
                 cameraData.requiresOpaqueTexture = settings.supportsCameraOpaqueTexture;
+                // 设置renderer
                 cameraData.renderer = asset.scriptableRenderer;
             }
 

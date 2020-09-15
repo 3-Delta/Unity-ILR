@@ -138,7 +138,7 @@ namespace UnityEngine.Rendering.Universal
     // 比如: UniversalRP-HighQuality
     public class UniversalRenderPipelineAsset : RenderPipelineAsset, ISerializationCallbackReceiver
     {
-        // URP版本升级辅助标记
+        // URP版本升级辅助标记,类似于上线之后的协议版本更新
         // Default values set when a new UniversalRenderPipeline asset is created
         [SerializeField] int k_AssetVersion = 5;
         [SerializeField] int k_AssetPreviousVersion = 5;
@@ -151,6 +151,7 @@ namespace UnityEngine.Rendering.Universal
         Shader m_DefaultShader;
         // 引用renderers
         // 一个pileline中可以有多个Renderer,也就是一个pipeline可能即存在前向渲染,又存在延迟渲染
+        // 但是同一时间，生效的只有一个
         ScriptableRenderer[] m_Renderers = new ScriptableRenderer[1];
         
         // Renderer settings

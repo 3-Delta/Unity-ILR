@@ -11,11 +11,14 @@ namespace UnityEngine.Rendering.Universal.Internal
         {
             public static int _WorldToShadow;
             public static int _ShadowParams;
+            
             public static int _CascadeShadowSplitSpheres0;
             public static int _CascadeShadowSplitSpheres1;
             public static int _CascadeShadowSplitSpheres2;
             public static int _CascadeShadowSplitSpheres3;
+            
             public static int _CascadeShadowSplitSphereRadii;
+            
             public static int _ShadowOffset0;
             public static int _ShadowOffset1;
             public static int _ShadowOffset2;
@@ -25,8 +28,10 @@ namespace UnityEngine.Rendering.Universal.Internal
 
         const int k_MaxCascades = 4;
         const int k_ShadowmapBufferBits = 16;
+        
         int m_ShadowmapWidth;
         int m_ShadowmapHeight;
+        
         int m_ShadowCasterCascadesCount;
         bool m_SupportsBoxFilterForShadows;
 

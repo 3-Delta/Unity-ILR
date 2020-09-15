@@ -231,7 +231,7 @@ namespace UnityEngine.Rendering.Universal
         internal static int GetLastValidColorBufferIndex(RenderTargetIdentifier[] colorBuffers)
         {
             int i = colorBuffers.Length - 1;
-            for(; i>=0; --i)
+            for(; i >= 0; --i)
             {
                 if (colorBuffers[i] != 0)
                     break;

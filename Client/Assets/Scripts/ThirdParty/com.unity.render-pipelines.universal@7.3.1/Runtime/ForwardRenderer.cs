@@ -12,6 +12,28 @@ namespace UnityEngine.Rendering.Universal
         const int k_DepthStencilBufferBits = 32;
         const string k_CreateCameraTextures = "Create Camera Texture";
 
+#if UNITY_EDITOR
+        SceneViewDepthCopyPass m_SceneViewDepthCopyPass;
+#endif
+
+        RenderTargetHandle m_ActiveCameraColorAttachment;
+        RenderTargetHandle m_ActiveCameraDepthAttachment;
+        RenderTargetHandle m_CameraColorAttachment;
+        RenderTargetHandle m_CameraDepthAttachment;
+        RenderTargetHandle m_DepthTexture;
+        RenderTargetHandle m_OpaqueColor;
+        RenderTargetHandle m_AfterPostProcessColor;
+        RenderTargetHandle m_ColorGradingLut;
+
+        ForwardLights m_ForwardLights;
+        
+        Material m_BlitMaterial;
+        Material m_CopyDepthMaterial;
+        Material m_SamplingMaterial;
+        Material m_ScreenspaceShadowsMaterial;
+        
+        StencilState m_DefaultStencilState;
+        
         ColorGradingLutPass m_ColorGradingLutPass;
         DepthOnlyPass m_DepthPrepass;
         MainLightShadowCasterPass m_MainLightShadowCasterPass;
@@ -34,27 +56,6 @@ namespace UnityEngine.Rendering.Universal
         PostProcessPassCompat m_PostProcessPassCompat;
 #endif
 
-#if UNITY_EDITOR
-        SceneViewDepthCopyPass m_SceneViewDepthCopyPass;
-#endif
-
-        RenderTargetHandle m_ActiveCameraColorAttachment;
-        RenderTargetHandle m_ActiveCameraDepthAttachment;
-        RenderTargetHandle m_CameraColorAttachment;
-        RenderTargetHandle m_CameraDepthAttachment;
-        RenderTargetHandle m_DepthTexture;
-        RenderTargetHandle m_OpaqueColor;
-        RenderTargetHandle m_AfterPostProcessColor;
-        RenderTargetHandle m_ColorGradingLut;
-
-        ForwardLights m_ForwardLights;
-        StencilState m_DefaultStencilState;
-
-        Material m_BlitMaterial;
-        Material m_CopyDepthMaterial;
-        Material m_SamplingMaterial;
-        Material m_ScreenspaceShadowsMaterial;
-
         public ForwardRenderer(ForwardRendererData data) : base(data)
         {
             m_BlitMaterial = CoreUtils.CreateEngineMaterial(data.shaders.blitPS);
@@ -63,6 +64,7 @@ namespace UnityEngine.Rendering.Universal
             m_ScreenspaceShadowsMaterial = CoreUtils.CreateEngineMaterial(data.shaders.screenSpaceShadowPS);
 
             StencilStateData stencilData = data.defaultStencilState;
+            // StencilState是一个关于Stencil的结构
             m_DefaultStencilState = StencilState.defaultValue;
             m_DefaultStencilState.enabled = stencilData.overrideStencilState;
             m_DefaultStencilState.SetCompareFunction(stencilData.stencilCompareFunction);
@@ -74,17 +76,23 @@ namespace UnityEngine.Rendering.Universal
             // we inject the builtin passes in the before events.
             m_MainLightShadowCasterPass = new MainLightShadowCasterPass(RenderPassEvent.BeforeRenderingShadows);
             m_AdditionalLightsShadowCasterPass = new AdditionalLightsShadowCasterPass(RenderPassEvent.BeforeRenderingShadows);
+            
+            // 渲染队列范围：RenderQueueRange
             m_DepthPrepass = new DepthOnlyPass(RenderPassEvent.BeforeRenderingPrepasses, RenderQueueRange.opaque, data.opaqueLayerMask);
             m_ScreenSpaceShadowResolvePass = new ScreenSpaceShadowResolvePass(RenderPassEvent.BeforeRenderingPrepasses, m_ScreenspaceShadowsMaterial);
             m_ColorGradingLutPass = new ColorGradingLutPass(RenderPassEvent.BeforeRenderingPrepasses, data.postProcessData);
+            
             m_RenderOpaqueForwardPass = new DrawObjectsPass("Render Opaques", true, RenderPassEvent.BeforeRenderingOpaques, RenderQueueRange.opaque, data.opaqueLayerMask, m_DefaultStencilState, stencilData.stencilReference);
             m_CopyDepthPass = new CopyDepthPass(RenderPassEvent.AfterRenderingSkybox, m_CopyDepthMaterial);
             m_DrawSkyboxPass = new DrawSkyboxPass(RenderPassEvent.BeforeRenderingSkybox);
+            
             m_CopyColorPass = new CopyColorPass(RenderPassEvent.BeforeRenderingTransparents, m_SamplingMaterial);
             m_TransparentSettingsPass = new TransparentSettingsPass(RenderPassEvent.BeforeRenderingTransparents, data.shadowTransparentReceive);
             m_RenderTransparentForwardPass = new DrawObjectsPass("Render Transparents", false, RenderPassEvent.BeforeRenderingTransparents, RenderQueueRange.transparent, data.transparentLayerMask, m_DefaultStencilState, stencilData.stencilReference);
+            
             m_OnRenderObjectCallbackPass = new InvokeOnRenderObjectCallbackPass(RenderPassEvent.BeforeRenderingPostProcessing);
             m_PostProcessPass = new PostProcessPass(RenderPassEvent.BeforeRenderingPostProcessing, data.postProcessData, m_BlitMaterial);
+            
             m_FinalPostProcessPass = new PostProcessPass(RenderPassEvent.AfterRendering + 1, data.postProcessData, m_BlitMaterial);
             m_CapturePass = new CapturePass(RenderPassEvent.AfterRendering);
             m_FinalBlitPass = new FinalBlitPass(RenderPassEvent.AfterRendering + 1, m_BlitMaterial);

@@ -11,7 +11,7 @@ namespace UnityEngine.Experimental.Rendering.Universal
         Transparent,
     }
 
-    [MovedFrom("UnityEngine.Experimental.Rendering.LWRP")]public class RenderObjects : ScriptableRendererFeature
+    [MovedFrom("UnityEngine.Experimental.Rendering.LWRP")]public class RenderFeatureObjects : ScriptableRendererFeature
     {
         [System.Serializable]
         public class RenderObjectsSettings

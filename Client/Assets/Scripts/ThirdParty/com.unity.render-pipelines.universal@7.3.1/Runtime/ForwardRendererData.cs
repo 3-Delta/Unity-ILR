@@ -110,6 +110,7 @@ namespace UnityEngine.Rendering.Universal
 
         /// <summary>
         /// True if transparent objects receive shadows.
+        /// 半透明接受阴影
         /// </summary>
         public bool shadowTransparentReceive
         {

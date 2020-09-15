@@ -58,6 +58,12 @@ public class AssemblyILRuntime : IAssembly
             appDomain.LoadAssembly(dllMemory);
 #endif
             ILRService.Init(appDomain);
+            
+            // 未捕获的异常都走这里
+            // AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
+            // {
+            //     Debug.Log($"UnhandledException: {ex.ExceptionObject}");
+            // };
         }
         catch
         {

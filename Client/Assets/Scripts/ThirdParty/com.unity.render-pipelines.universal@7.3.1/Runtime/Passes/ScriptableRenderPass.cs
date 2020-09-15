@@ -35,6 +35,7 @@ namespace UnityEngine.Rendering.Universal
     {
         public RenderPassEvent renderPassEvent { get; set; }
 
+        // MRT支持，如果非MRT，则长度为0，使用colorAttachment
         public RenderTargetIdentifier[] colorAttachments
         {
             get => m_ColorAttachments;

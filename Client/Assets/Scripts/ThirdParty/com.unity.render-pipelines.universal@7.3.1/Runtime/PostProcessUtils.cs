@@ -2,12 +2,6 @@ namespace UnityEngine.Rendering.Universal
 {
     public static class PostProcessUtils
     {
-        [System.Obsolete("This method is obsolete. Use ConfigureDithering override that takes camera pixel width and height instead.")]
-        public static int ConfigureDithering(PostProcessData data, int index, Camera camera, Material material)
-        {
-            return ConfigureDithering(data, index, camera.pixelWidth, camera.pixelHeight, material);
-        }
-
         // TODO: Add API docs
         public static int ConfigureDithering(PostProcessData data, int index, int cameraPixelWidth, int cameraPixelHeight, Material material)
         {
@@ -42,13 +36,7 @@ namespace UnityEngine.Rendering.Universal
 
             return index;
         }
-
-        [System.Obsolete("This method is obsolete. Use ConfigureFilmGrain override that takes camera pixel width and height instead.")]
-        public static void ConfigureFilmGrain(PostProcessData data, FilmGrain settings, Camera camera, Material material)
-        {
-            ConfigureFilmGrain(data, settings, camera.pixelWidth, camera.pixelHeight, material);
-        }
-
+        
         // TODO: Add API docs
         public static void ConfigureFilmGrain(PostProcessData data, FilmGrain settings, int cameraPixelWidth, int cameraPixelHeight, Material material)
         {

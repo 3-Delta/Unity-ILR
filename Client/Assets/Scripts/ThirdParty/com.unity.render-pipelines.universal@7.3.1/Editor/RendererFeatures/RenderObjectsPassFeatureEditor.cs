@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace UnityEditor.Experimental.Rendering.Universal
 {
-	[CustomPropertyDrawer(typeof(RenderObjects.RenderObjectsSettings), true)]
+	[CustomPropertyDrawer(typeof(RenderFeatureObjects.RenderObjectsSettings), true)]
     internal class RenderObjectsPassFeatureEditor : PropertyDrawer
     {
 	    internal class Styles

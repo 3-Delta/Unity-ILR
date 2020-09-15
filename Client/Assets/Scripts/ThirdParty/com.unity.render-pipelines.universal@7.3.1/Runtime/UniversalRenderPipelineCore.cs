@@ -251,8 +251,7 @@ namespace UnityEngine.Rendering.Universal
         }
 
         // 大致根据camera创建RenderTextureDescriptor
-        static RenderTextureDescriptor CreateRenderTextureDescriptor(Camera camera, float renderScale,
-            bool isStereoEnabled, bool isHdrEnabled, int msaaSamples, bool needsAlpha)
+        static RenderTextureDescriptor CreateRenderTextureDescriptor(Camera camera, float renderScale, bool isStereoEnabled, bool isHdrEnabled, int msaaSamples, bool needsAlpha)
         {
             RenderTextureDescriptor desc;
             RenderTextureFormat renderTextureFormatDefault = RenderTextureFormat.Default;
