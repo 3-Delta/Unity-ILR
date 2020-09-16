@@ -340,6 +340,7 @@ namespace UnityEngine.Rendering.Universal
 #endif
         }
 
+        // 核心函数
         // 这里创建最终的pipeline: UniversalRenderPipeline
         protected override RenderPipeline CreatePipeline()
         {

@@ -87,6 +87,7 @@ float4x4 unity_CameraToWorld;
 
 // ----------------------------------------------------------------------------
 
+// Unity通用Cbuffer
 // Block Layout should be respected due to SRP Batcher
 CBUFFER_START(UnityPerDraw)
 // Space block Feature
@@ -129,20 +130,20 @@ CBUFFER_END
 #endif
 
 #if defined(USING_STEREO_MATRICES)
-GLOBAL_CBUFFER_START(UnityStereoGlobals)
-float4x4 unity_StereoMatrixP[2];
-float4x4 unity_StereoMatrixV[2];
-float4x4 unity_StereoMatrixInvV[2];
-float4x4 unity_StereoMatrixVP[2];
+    GLOBAL_CBUFFER_START(UnityStereoGlobals)
+    float4x4 unity_StereoMatrixP[2];
+    float4x4 unity_StereoMatrixV[2];
+    float4x4 unity_StereoMatrixInvV[2];
+    float4x4 unity_StereoMatrixVP[2];
 
-float4x4 unity_StereoCameraProjection[2];
-float4x4 unity_StereoCameraInvProjection[2];
-float4x4 unity_StereoWorldToCamera[2];
-float4x4 unity_StereoCameraToWorld[2];
+    float4x4 unity_StereoCameraProjection[2];
+    float4x4 unity_StereoCameraInvProjection[2];
+    float4x4 unity_StereoWorldToCamera[2];
+    float4x4 unity_StereoCameraToWorld[2];
 
-float3 unity_StereoWorldSpaceCameraPos[2];
-float4 unity_StereoScaleOffset[2];
-GLOBAL_CBUFFER_END
+    float3 unity_StereoWorldSpaceCameraPos[2];
+    float4 unity_StereoScaleOffset[2];
+    GLOBAL_CBUFFER_END
 #endif
 
 #if defined(USING_STEREO_MATRICES) && defined(UNITY_STEREO_MULTIVIEW_ENABLED)
@@ -184,12 +185,12 @@ float4 unity_FogParams;
 real4  unity_FogColor;
 
 #if !defined(USING_STEREO_MATRICES)
-float4x4 glstate_matrix_projection;
-float4x4 unity_MatrixV;
-float4x4 unity_MatrixInvV;
-float4x4 unity_MatrixVP;
-float4 unity_StereoScaleOffset;
-int unity_StereoEyeIndex;
+    float4x4 glstate_matrix_projection;
+    float4x4 unity_MatrixV;
+    float4x4 unity_MatrixInvV;
+    float4x4 unity_MatrixVP;
+    float4 unity_StereoScaleOffset;
+    int unity_StereoEyeIndex;
 #endif
 
 real4 unity_ShadowColor;

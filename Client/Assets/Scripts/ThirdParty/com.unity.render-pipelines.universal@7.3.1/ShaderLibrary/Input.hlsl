@@ -39,27 +39,32 @@ struct InputData
 //                      Constant Buffers                                     //
 ///////////////////////////////////////////////////////////////////////////////
 
+// UniversalRenderPipeline中的PerFrameBuffer
 half4 _GlossyEnvironmentColor;
 half4 _SubtractiveShadowColor;
 
+// UniversalRenderPipeline中的PerCameraBuffer
 float4x4 _InvCameraViewProj;
 float4 _ScaledScreenParams;
 
+// ForwardLights中的LightConstantBuffer._MainLightPosition
 float4 _MainLightPosition;
 half4 _MainLightColor;
 
 half4 _AdditionalLightsCount;
+
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
-StructuredBuffer<LightData> _AdditionalLightsBuffer;
-StructuredBuffer<int> _AdditionalLightsIndices;
+    StructuredBuffer<LightData> _AdditionalLightsBuffer;
+    StructuredBuffer<int> _AdditionalLightsIndices;
 #else
-float4 _AdditionalLightsPosition[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsColor[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsAttenuation[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsSpotDir[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsOcclusionProbes[MAX_VISIBLE_LIGHTS];
+    float4 _AdditionalLightsPosition[MAX_VISIBLE_LIGHTS];
+    half4 _AdditionalLightsColor[MAX_VISIBLE_LIGHTS];
+    half4 _AdditionalLightsAttenuation[MAX_VISIBLE_LIGHTS];
+    half4 _AdditionalLightsSpotDir[MAX_VISIBLE_LIGHTS];
+    half4 _AdditionalLightsOcclusionProbes[MAX_VISIBLE_LIGHTS];
 #endif
 
+// MVP相关矩阵
 #define UNITY_MATRIX_M     unity_ObjectToWorld
 #define UNITY_MATRIX_I_M   unity_WorldToObject
 #define UNITY_MATRIX_V     unity_MatrixV

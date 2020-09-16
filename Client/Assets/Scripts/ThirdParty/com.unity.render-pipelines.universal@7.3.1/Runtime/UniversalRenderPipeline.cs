@@ -246,6 +246,7 @@ namespace UnityEngine.Rendering.Universal
                 renderer.Clear(cameraData.renderType);
                 renderer.SetupCullingParameters(ref cullingParameters, ref cameraData);
 
+                // 不立即执行，而是等待最终的commit
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
 
@@ -253,10 +254,13 @@ namespace UnityEngine.Rendering.Universal
                 // Emit scene view UI
                 if (cameraData.isSceneViewCamera)
                 {
+                    // 相机剔除之前完成
                     ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
                 }
 #endif
 
+                // https://zhuanlan.zhihu.com/p/165140042
+                // 真实裁剪
                 var cullResults = context.Cull(ref cullingParameters);
                 InitializeRenderingData(asset, ref cameraData, ref cullResults, requiresBlitToBackbuffer, anyPostProcessingEnabled, out var renderingData);
 
