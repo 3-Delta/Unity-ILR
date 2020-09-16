@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.Rendering.Universal
 {
+    // shader剔除操作
     internal class ShaderPreprocessor : IPreprocessShaders
     {
         [Flags]
