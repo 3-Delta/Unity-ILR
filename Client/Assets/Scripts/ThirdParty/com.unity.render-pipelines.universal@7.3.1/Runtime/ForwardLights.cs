@@ -14,10 +14,14 @@ namespace UnityEngine.Rendering.Universal.Internal
             public static int _MainLightColor;
 
             public static int _AdditionalLightsCount;
-            public static int _AdditionalLightsPosition;
-            public static int _AdditionalLightsColor;
-            public static int _AdditionalLightsAttenuation;
-            public static int _AdditionalLightsSpotDir;
+            
+            public static int _AdditionalLightsPosition; // 位置或者位置
+            public static int _AdditionalLightsColor; // 颜色
+            public static int _AdditionalLightsAttenuation;  // 衰减
+            public static int _AdditionalLightsSpotDir; // 聚光灯方向  聚光灯不仅有位置,还有方向,可以理解为 一个在特定方向上发光的点光源
+            // 平行光没有位置, 没有方向 无衰减  所以到达顶点的方向, 就是方向
+            // 点光源没有方向, 有位置 因为是四面发散 有衰减 所以到达顶点的方向, 就是位置-顶点位置
+            // 聚光灯 有位置, 有方向  因为是有朝向性质的发散 有衰减
 
             public static int _AdditionalLightOcclusionProbeChannel;
         }
@@ -93,6 +97,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             CommandBufferPool.Release(cmd);
         }
 
+        // 配置灯光数据,根据光源类型
         void InitializeLightConstants(NativeArray<VisibleLight> lights, int lightIndex, out Vector4 lightPos, out Vector4 lightColor, out Vector4 lightAttenuation, out Vector4 lightSpotDir, out Vector4 lightOcclusionProbeChannel)
         {
             lightPos = k_DefaultLightPosition;

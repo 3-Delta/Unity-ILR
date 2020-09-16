@@ -4,7 +4,7 @@
 #define UNIVERSAL_SHADER_VARIABLES_INCLUDED
 
 #if defined(STEREO_INSTANCING_ON) && (defined(SHADER_API_D3D11) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE) || defined(SHADER_API_PSSL) || defined(SHADER_API_VULKAN))
-#define UNITY_STEREO_INSTANCING_ENABLED
+    #define UNITY_STEREO_INSTANCING_ENABLED
 #endif
 
 #if defined(STEREO_MULTIVIEW_ON) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE) || defined(SHADER_API_VULKAN)) && !(defined(SHADER_API_SWITCH))
@@ -12,20 +12,20 @@
 #endif
 
 #if defined(UNITY_SINGLE_PASS_STEREO) || defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
-#define USING_STEREO_MATRICES
+    #define USING_STEREO_MATRICES
 #endif
 
 #if defined(USING_STEREO_MATRICES)
-#define glstate_matrix_projection unity_StereoMatrixP[unity_StereoEyeIndex]
-#define unity_MatrixV unity_StereoMatrixV[unity_StereoEyeIndex]
-#define unity_MatrixInvV unity_StereoMatrixInvV[unity_StereoEyeIndex]
-#define unity_MatrixVP unity_StereoMatrixVP[unity_StereoEyeIndex]
-
-#define unity_CameraProjection unity_StereoCameraProjection[unity_StereoEyeIndex]
-#define unity_CameraInvProjection unity_StereoCameraInvProjection[unity_StereoEyeIndex]
-#define unity_WorldToCamera unity_StereoWorldToCamera[unity_StereoEyeIndex]
-#define unity_CameraToWorld unity_StereoCameraToWorld[unity_StereoEyeIndex]
-#define _WorldSpaceCameraPos unity_StereoWorldSpaceCameraPos[unity_StereoEyeIndex]
+    #define glstate_matrix_projection unity_StereoMatrixP[unity_StereoEyeIndex]
+    #define unity_MatrixV unity_StereoMatrixV[unity_StereoEyeIndex]
+    #define unity_MatrixInvV unity_StereoMatrixInvV[unity_StereoEyeIndex]
+    #define unity_MatrixVP unity_StereoMatrixVP[unity_StereoEyeIndex]
+    
+    #define unity_CameraProjection unity_StereoCameraProjection[unity_StereoEyeIndex]
+    #define unity_CameraInvProjection unity_StereoCameraInvProjection[unity_StereoEyeIndex]
+    #define unity_WorldToCamera unity_StereoWorldToCamera[unity_StereoEyeIndex]
+    #define unity_CameraToWorld unity_StereoCameraToWorld[unity_StereoEyeIndex]
+    #define _WorldSpaceCameraPos unity_StereoWorldSpaceCameraPos[unity_StereoEyeIndex]
 #endif
 
 #define UNITY_LIGHTMODEL_AMBIENT (glstate_lightmodel_ambient * 2)
@@ -76,13 +76,13 @@ float4 unity_OrthoParams;
 float4 unity_CameraWorldClipPlanes[6];
 
 #if !defined(USING_STEREO_MATRICES)
-// Projection matrices of the camera. Note that this might be different from projection matrix
-// that is set right now, e.g. while rendering shadows the matrices below are still the projection
-// of original camera.
-float4x4 unity_CameraProjection;
-float4x4 unity_CameraInvProjection;
-float4x4 unity_WorldToCamera;
-float4x4 unity_CameraToWorld;
+    // Projection matrices of the camera. Note that this might be different from projection matrix
+    // that is set right now, e.g. while rendering shadows the matrices below are still the projection
+    // of original camera.
+    float4x4 unity_CameraProjection;
+    float4x4 unity_CameraInvProjection;
+    float4x4 unity_WorldToCamera;
+    float4x4 unity_CameraToWorld;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -90,35 +90,35 @@ float4x4 unity_CameraToWorld;
 // Unity通用Cbuffer
 // Block Layout should be respected due to SRP Batcher
 CBUFFER_START(UnityPerDraw)
-// Space block Feature
-float4x4 unity_ObjectToWorld;
-float4x4 unity_WorldToObject;
-float4 unity_LODFade; // x is the fade value ranging within [0,1]. y is x quantized into 16 levels
-real4 unity_WorldTransformParams; // w is usually 1.0, or -1.0 for odd-negative scale transforms
-
-// Light Indices block feature
-// These are set internally by the engine upon request by RendererConfiguration.
-real4 unity_LightData;
-real4 unity_LightIndices[2];
-
-float4 unity_ProbesOcclusion;
-
-// Reflection Probe 0 block feature
-// HDR environment map decode instructions
-real4 unity_SpecCube0_HDR;
-
-// Lightmap block feature
-float4 unity_LightmapST;
-float4 unity_DynamicLightmapST;
-
-// SH block feature
-real4 unity_SHAr;
-real4 unity_SHAg;
-real4 unity_SHAb;
-real4 unity_SHBr;
-real4 unity_SHBg;
-real4 unity_SHBb;
-real4 unity_SHC;
+    // Space block Feature
+    float4x4 unity_ObjectToWorld;
+    float4x4 unity_WorldToObject;
+    float4 unity_LODFade; // x is the fade value ranging within [0,1]. y is x quantized into 16 levels
+    real4 unity_WorldTransformParams; // w is usually 1.0, or -1.0 for odd-negative scale transforms
+    
+    // Light Indices block feature
+    // These are set internally by the engine upon request by RendererConfiguration.
+    real4 unity_LightData;
+    real4 unity_LightIndices[2];
+    
+    float4 unity_ProbesOcclusion;
+    
+    // Reflection Probe 0 block feature
+    // HDR environment map decode instructions
+    real4 unity_SpecCube0_HDR;
+    
+    // Lightmap block feature
+    float4 unity_LightmapST;
+    float4 unity_DynamicLightmapST;
+    
+    // SH block feature
+    real4 unity_SHAr;
+    real4 unity_SHAg;
+    real4 unity_SHAb;
+    real4 unity_SHBr;
+    real4 unity_SHBg;
+    real4 unity_SHBb;
+    real4 unity_SHC;
 CBUFFER_END
 
 #if defined(UNITY_STEREO_MULTIVIEW_ENABLED) || ((defined(UNITY_SINGLE_PASS_STEREO) || defined(UNITY_STEREO_INSTANCING_ENABLED)) && (defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES3) || defined(SHADER_API_METAL) || defined(SHADER_API_VULKAN)))

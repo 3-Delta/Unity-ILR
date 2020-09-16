@@ -168,6 +168,9 @@ namespace UnityEngine.Rendering.Universal
 
         public static void SetupShadowCasterConstantBuffer(CommandBuffer cmd, ref VisibleLight shadowLight, Vector4 shadowBias)
         {
+            // https://zhuanlan.zhihu.com/p/180426133
+            // 光线沿其局部Z轴发光。我们可以通过VisibleLight.localtoWorld矩阵字段在世界空间中找到此向量。该矩阵的第三列定义了转换后的局部Z方向矢量，我们可以通过Matrix4x4.GetColumn方法将索引2作为参数来获取。
+            // 第四列是 光源位置
             Vector3 lightDirection = -shadowLight.localToWorldMatrix.GetColumn(2);
             cmd.SetGlobalVector("_ShadowBias", shadowBias);
             cmd.SetGlobalVector("_LightDirection", new Vector4(lightDirection.x, lightDirection.y, lightDirection.z, 0.0f));

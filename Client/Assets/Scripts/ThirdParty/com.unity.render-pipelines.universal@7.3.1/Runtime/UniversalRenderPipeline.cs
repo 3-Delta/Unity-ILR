@@ -158,10 +158,13 @@ namespace UnityEngine.Rendering.Universal
         {
             BeginFrameRendering(renderContext, cameras);
 
-            // 线性光照计算
+            // https://zhuanlan.zhihu.com/p/180426133
+            // 默认管线下,Unity认为光照强度是Gamma空间下定义的,这个设置只能通过代码设置,不能Inspector设置
+            // 线性光照强度计算
             GraphicsSettings.lightsUseLinearIntensity = (QualitySettings.activeColorSpace == ColorSpace.Linear);
             // UrpBatcher
             GraphicsSettings.useScriptableRenderPipelineBatching = asset.useSRPBatcher;
+            
             SetupPerFrameShaderConstants();
 
             // 相机深度排序[每帧都排序:浪费, 应该只在depth改变或者camera个数变化的时候排序]

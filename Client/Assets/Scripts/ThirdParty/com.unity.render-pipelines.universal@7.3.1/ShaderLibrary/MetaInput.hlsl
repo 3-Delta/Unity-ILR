@@ -5,13 +5,13 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 
 CBUFFER_START(UnityMetaPass)
-// x = use uv1 as raster position
-// y = use uv2 as raster position
-bool4 unity_MetaVertexControl;
-
-// x = return albedo
-// y = return normal
-bool4 unity_MetaFragmentControl;
+    // x = use uv1 as raster position
+    // y = use uv2 as raster position
+    bool4 unity_MetaVertexControl;
+    
+    // x = return albedo
+    // y = return normal
+    bool4 unity_MetaFragmentControl;
 CBUFFER_END
 
 float unity_OneOverOutputBoost;

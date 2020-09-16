@@ -262,6 +262,8 @@ namespace UnityEngine.Rendering.Universal
 #endif
             float deltaTime = Time.deltaTime;
             float smoothDeltaTime = Time.smoothDeltaTime;
+            
+            // 渲染之前先设置时间数据
             SetShaderTimeValues(time, deltaTime, smoothDeltaTime);
 
             // Upper limits for each block. Each block will contains render passes with events below the limit.
@@ -278,6 +280,7 @@ namespace UnityEngine.Rendering.Universal
             FillBlockRanges(blockEventLimits, blockRanges);
             blockEventLimits.Dispose();
 
+            // 渲染之前先设置光源数据
             SetupLights(context, ref renderingData);
 
             // Before Render Block. This render blocks always execute in mono rendering.
