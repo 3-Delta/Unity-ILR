@@ -6,6 +6,7 @@
 #include "Core.hlsl"
 
 #define SHADOWS_SCREEN 0
+// 最大阴影级联
 #define MAX_SHADOW_CASCADES 4
 
 #if !defined(_RECEIVE_SHADOWS_OFF)
@@ -38,7 +39,7 @@ SAMPLER_CMP(sampler_AdditionalLightsShadowmapTexture);
 // Last cascade is initialized with a no-op matrix. It always transforms
 // shadow coord to half3(0, 0, NEAR_PLANE). We use this trick to avoid
 // branching since ComputeCascadeIndex can return cascade index = MAX_SHADOW_CASCADES
-// MainLightShadowCasterPass.cs
+// 对应:MainLightShadowCasterPass.cs
 float4x4    _MainLightWorldToShadow[MAX_SHADOW_CASCADES + 1];
 float4      _CascadeShadowSplitSpheres0;
 float4      _CascadeShadowSplitSpheres1;

@@ -149,6 +149,7 @@ real3 NormalizeNormalPerPixel(real3 normalWS)
 }
 
 // TODO: A similar function should be already available in SRP lib on master. Use that instead
+// NDC位置 转换为 (视口空间位置 * w), 不除以w是因为 需要从顶点着色器到片元着色器进行线性插值
 float4 ComputeScreenPos(float4 positionCS)
 {
     float4 o = positionCS * 0.5f;

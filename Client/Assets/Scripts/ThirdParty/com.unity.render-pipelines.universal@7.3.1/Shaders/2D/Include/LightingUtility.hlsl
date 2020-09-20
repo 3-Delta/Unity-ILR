@@ -48,6 +48,7 @@
     #define APPLY_NORMALS_LIGHTING(input, lightColor)
 #endif
 
+// 定义 阴影坐标
 #define SHADOW_COORDS(TEXCOORDA)\
     float2  shadowUV    : TEXCOORDA;
 
@@ -65,8 +66,7 @@
         color.rgb = (color.rgb * shadowIntensity) + (color.rgb * intensity*(1 - shadowIntensity));\
     }
 
-    
-
+ // 计算shadowUV,通过计算
 #define TRANSFER_SHADOWS(output)\
     output.shadowUV = ComputeScreenPos(output.positionCS / output.positionCS.w).xy;
 

@@ -52,6 +52,7 @@ real GetOddNegativeScale()
     return unity_WorldTransformParams.w;
 }
 
+// 使用该类函数 代替 mul(MVP, cor)的作用就是:  w常量为1, 可以节省性能
 float3 TransformObjectToWorld(float3 positionOS)
 {
     return mul(GetObjectToWorldMatrix(), float4(positionOS, 1.0)).xyz;
