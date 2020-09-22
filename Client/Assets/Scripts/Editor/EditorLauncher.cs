@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 // 借助编辑器的生命周期，执行一些快捷的操作
-[InitializeOnLoad]
+// [InitializeOnLoad]
 public static class EditorLauncher
 {
     static EditorLauncher()
