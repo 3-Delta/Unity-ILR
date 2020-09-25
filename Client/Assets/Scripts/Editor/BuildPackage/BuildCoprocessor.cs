@@ -1,37 +1,18 @@
-﻿using System.IO;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEditor;
 
-#if ENABLE_VSTU
-using SyntaxTree.VisualStudio.Unity.Bridge;
+// build的时候过滤一些程序集,不支持添加
+public class Filter : UnityEditor.Build.IFilterBuildAssemblies {
+    public int callbackOrder => 1;
 
-// https://docs.microsoft.com/en-us/visualstudio/cross-platform/customize-project-files-created-by-vstu?view=vs-2019
-// https://docs.microsoft.com/zh-cn/visualstudio/cross-platform/customize-project-files-created-by-vstu?view=vs-2019
-[InitializeOnLoad]
-public class BuildCoprocessor
-{
-    // necessary for XLinq to save the xml project file in utf8
-    public class Utf8StringWriter : StringWriter {
-        public override Encoding Encoding => Encoding.UTF8;
-    }
+    public string[] OnFilterAssemblies(UnityEditor.BuildOptions buildOptions, string[] assemblies) {
+        for (int i = 0, length = assemblies.Length; i < length; ++i) {
+            Debug.LogError("assemblies[i]: " + assemblies[i]);
+        }
 
-    static BuildCoprocessor()
-    {
-        ProjectFilesGenerator.ProjectFileGeneration += (string name, string content) =>
-        {
-            Debug.LogError(name + " ===============>>>  " + content);   
-
-            // parse the document and make some changes
-            var document = XDocument.Parse(content);
-
-            // save the changes using the Utf8StringWriter
-            var str = new Utf8StringWriter();
-            document.Save(str);
-
-            return str.ToString();
-        };
+        var list = new List<string>(assemblies);
+        list.Add("Library/PlayerScriptAssemblies/Hotfix.dll");
+        return list.ToArray();
     }
 }
-#endif
