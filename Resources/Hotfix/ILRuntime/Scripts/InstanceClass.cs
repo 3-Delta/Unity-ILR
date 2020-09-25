@@ -27,6 +27,11 @@ namespace HotFix {
             int a = 1;
             a += 2;
             UnityEngine.Debug.Log("!!! InstanceClass.StaticFunTest()" + a.ToString());
+
+            // 测试将热更dll放到unity工程中,能否互相调用,结果显示可以互相调用.
+            TestClassss ttt = new TestClassss();
+            ttt.Gunc();
+            TestClassss.Func();
         }
 
         public static void StaticFUncTestDateTime() {
