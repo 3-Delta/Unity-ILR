@@ -1,4 +1,10 @@
-﻿public enum EHotfixType 
+﻿// 宏定义4种热更新方式
+#define HOTFIX_ILR
+#define HOTFIX_Ts
+#define HOTFIX_Native
+#define HOTFIX_Reflection
+
+public enum EHotfixType 
 {
     ILRuntime,
     PuerTs,
