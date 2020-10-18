@@ -344,12 +344,14 @@ namespace UnityEngine.Rendering.Universal
             m_RendererIndex = index;
         }
 
+        // 最终传递给CameraData, 主要用于后处理VolumeManager.instance.Update(trigger, layerMask);
         public LayerMask volumeLayerMask
         {
             get => m_VolumeLayerMask;
             set => m_VolumeLayerMask = value;
         }
 
+        // 最终传递给CameraData, 主要用于后处理VolumeManager.instance.Update(trigger, layerMask);
         public Transform volumeTrigger
         {
             get => m_VolumeTrigger;

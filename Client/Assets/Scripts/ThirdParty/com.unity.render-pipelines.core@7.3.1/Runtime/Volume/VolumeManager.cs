@@ -38,6 +38,7 @@ namespace UnityEngine.Rendering
         const int k_MaxLayerCount = 32;
 
         // Cached lists of all volumes (sorted by priority) by layer mask
+        // key是gameobject.layer, value是优先级从小到大排序的volume
         readonly Dictionary<int, List<Volume>> m_SortedVolumes;
 
         // Holds all the registered volumes
@@ -417,6 +418,7 @@ namespace UnityEngine.Rendering
         }
 
         // Stable insertion sort. Faster than List<T>.Sort() for our needs.
+        // 插入排序，从小到大
         static void SortByPriority(List<Volume> volumes)
         {
             Assert.IsNotNull(volumes, "Trying to sort volumes of non-initialized layer");

@@ -552,6 +552,7 @@ namespace UnityEngine.Rendering.Universal
             var noFrontToBackOpaqueFlags = SortingCriteria.SortingLayer | SortingCriteria.RenderQueue | SortingCriteria.OptimizeStateChanges | SortingCriteria.CanvasOrder;
             // 是否支持HSR
             bool hasHSRGPU = SystemInfo.hasHiddenSurfaceRemovalOnGPU;
+            // hsr的话， 就不需要将不透明物体从前到后排序了，节省cpu排序消耗
             bool canSkipFrontToBackSorting = (baseCamera.opaqueSortMode == OpaqueSortMode.Default && hasHSRGPU) || baseCamera.opaqueSortMode == OpaqueSortMode.NoDistanceSort;
 
             cameraData.defaultOpaqueSortFlags = canSkipFrontToBackSorting ? noFrontToBackOpaqueFlags : commonOpaqueFlags;
@@ -559,8 +560,7 @@ namespace UnityEngine.Rendering.Universal
 
             // 需要alpha
             bool needsAlphaChannel = Graphics.preserveFramebufferAlpha;
-            cameraData.cameraTargetDescriptor = CreateRenderTextureDescriptor(baseCamera, cameraData.renderScale,
-                cameraData.isStereoEnabled, cameraData.isHdrEnabled, msaaSamples, needsAlphaChannel);
+            cameraData.cameraTargetDescriptor = CreateRenderTextureDescriptor(baseCamera, cameraData.renderScale, cameraData.isStereoEnabled, cameraData.isHdrEnabled, msaaSamples, needsAlphaChannel);
         }
 
         /// <summary>

@@ -4,6 +4,9 @@ namespace UnityEngine.Rendering
 {
     /// <summary>
     /// A generic Volume component holding a <see cref="VolumeProfile"/>.
+    /// Volume的VolumeProfile存储所有的后处理的VolumeComponents
+    /// VolumeManager中保存VolumeStack, stack中保存所有的VolumeComponents
+    /// stack类似一个缓存池的概念，Volume只是当前使用的volumeComponent，stack保存所有的volumeComponent
     /// </summary>
     [HelpURL(Documentation.baseURLHDRP + Documentation.version + Documentation.subURL + "Volumes" + Documentation.endURL)]
     [ExecuteAlways]
@@ -12,12 +15,14 @@ namespace UnityEngine.Rendering
     {
         /// <summary>
         /// Specifies whether to apply the Volume to the entire Scene or not.
+        /// 是否用于全场景
         /// </summary>
         [Tooltip("When enabled, HDRP applies this Volume to the entire Scene.")]
         public bool isGlobal = true;
 
         /// <summary>
         /// The Volume priority in the stack. A higher value means higher priority. This supports negative values.
+        /// stack中的优先级，越大优先级越高
         /// </summary>
         [Tooltip("Sets the Volume priority in the stack. A higher value means higher priority. You can use negative values.")]
         public float priority = 0f;

@@ -15,6 +15,7 @@ namespace UnityEngine.Rendering.Universal.Internal
     {
         private RenderTargetHandle source { get; set; }
         private RenderTargetHandle destination { get; set; }
+        
         Material m_CopyDepthMaterial;
         const string m_ProfilerTag = "Copy Depth";
 

@@ -99,6 +99,7 @@ namespace UnityEngine.Rendering.Universal
 
         public IEnumerator<Action<RenderTargetIdentifier, CommandBuffer>> captureActions;
 
+        // 这两个不知道什么用处，测试下来是后处理用的！
         public LayerMask volumeLayerMask;
         public Transform volumeTrigger;
 
