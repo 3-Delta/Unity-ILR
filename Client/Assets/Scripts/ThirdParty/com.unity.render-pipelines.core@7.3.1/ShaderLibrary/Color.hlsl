@@ -453,6 +453,7 @@ real3 Desaturate(real3 value, real saturation)
 // http://gpuopen.com/optimized-reversible-tonemapper-for-resolve/
 real FastTonemapPerChannel(real c)
 {
+    // rcp(x) = 1 / x
     return c * rcp(c + 1.0);
 }
 
