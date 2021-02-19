@@ -381,7 +381,7 @@ namespace UnityEngine.UI
                 }
             }
         }
-
+        public bool clearWhenNoSprite = false;
         private Sprite activeSprite { get { return m_OverrideSprite != null ? m_OverrideSprite : sprite; } }
 
         /// How the Image is drawn.
@@ -842,7 +842,12 @@ namespace UnityEngine.UI
         {
             if (activeSprite == null)
             {
-                base.OnPopulateMesh(toFill);
+                if (clearWhenNoSprite) {
+                    toFill.Clear();
+                }
+                else { 
+                    base.OnPopulateMesh(toFill); 
+                }
                 return;
             }
 

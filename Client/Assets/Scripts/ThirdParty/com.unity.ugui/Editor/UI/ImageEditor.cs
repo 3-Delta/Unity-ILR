@@ -27,6 +27,9 @@ namespace UnityEditor.UI
         SerializedProperty m_PreserveAspect;
         SerializedProperty m_UseSpriteMesh;
         SerializedProperty m_PixelsPerUnitMultiplier;
+
+        SerializedProperty m_ClearWhenNoSprite;
+
         GUIContent m_SpriteContent;
         GUIContent m_SpriteTypeContent;
         GUIContent m_ClockwiseContent;
@@ -54,6 +57,8 @@ namespace UnityEditor.UI
             m_PreserveAspect        = serializedObject.FindProperty("m_PreserveAspect");
             m_UseSpriteMesh         = serializedObject.FindProperty("m_UseSpriteMesh");
             m_PixelsPerUnitMultiplier = serializedObject.FindProperty("m_PixelsPerUnitMultiplier");
+
+            m_ClearWhenNoSprite = serializedObject.FindProperty("clearWhenNoSprite");
 
             m_ShowType = new AnimBool(m_Sprite.objectReferenceValue != null);
             m_ShowType.valueChanged.AddListener(Repaint);
@@ -89,6 +94,8 @@ namespace UnityEditor.UI
             AppearanceControlsGUI();
             RaycastControlsGUI();
             MaskableControlsGUI();
+
+            EditorGUILayout.PropertyField(m_ClearWhenNoSprite);
 
             m_ShowType.target = m_Sprite.objectReferenceValue != null;
             if (EditorGUILayout.BeginFadeGroup(m_ShowType.faded))

@@ -93,6 +93,8 @@ namespace UnityEngine.UI
             }
         }
 
+        public bool clearWhenNoTexture = false;
+
         /// <summary>
         /// UV rectangle used by the texture.
         /// </summary>
@@ -133,8 +135,12 @@ namespace UnityEngine.UI
         {
             Texture tex = mainTexture;
             vh.Clear();
-            if (tex != null)
+            if(tex != null)
             {
+                if (clearWhenNoTexture && tex == s_WhiteTexture) {
+                    return;
+                }
+
                 var r = GetPixelAdjustedRect();
                 var v = new Vector4(r.x, r.y, r.x + r.width, r.y + r.height);
                 var scaleX = tex.width * tex.texelSize.x;

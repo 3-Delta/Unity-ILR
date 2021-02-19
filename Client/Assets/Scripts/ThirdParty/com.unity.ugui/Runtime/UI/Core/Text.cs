@@ -564,9 +564,14 @@ namespace UnityEngine.UI
 
         protected override void UpdateGeometry()
         {
-            if (font != null)
-            {
+            if (font != null) {
                 base.UpdateGeometry();
+            }
+            else {
+                Debug.LogErrorFormat("miss font in gameObject {0}", gameObject.ToString());
+
+                s_VertexHelper.Clear();
+                FillSetMesh();
             }
         }
 
@@ -640,8 +645,10 @@ namespace UnityEngine.UI
         readonly UIVertex[] m_TempVerts = new UIVertex[4];
         protected override void OnPopulateMesh(VertexHelper toFill)
         {
-            if (font == null)
-                return;
+            if (font == null) {
+                toFill.Clear();
+                return; 
+            }
 
             // We don't care if we the font Texture changes while we are doing our Update.
             // The end result of cachedTextGenerator will be valid for this instance.

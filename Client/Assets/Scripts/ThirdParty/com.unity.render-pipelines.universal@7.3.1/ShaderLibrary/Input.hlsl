@@ -65,6 +65,9 @@ half4 _AdditionalLightsCount;
 #endif
 
 // MVP相关矩阵
+// Unity给gpu传递参数，其实是通过unity_ObjectToWorld等传递的，但是URP为了统一
+// 这里使用Marco宏进行来统一的处理
+// https://zhuanlan.zhihu.com/p/334775155
 #define UNITY_MATRIX_M     unity_ObjectToWorld
 #define UNITY_MATRIX_I_M   unity_WorldToObject
 #define UNITY_MATRIX_V     unity_MatrixV

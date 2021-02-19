@@ -151,6 +151,7 @@ namespace UnityEngine.UI
         /// </example>
         public virtual Color color { get { return m_Color; } set { if (SetPropertyUtility.SetColor(ref m_Color, value)) SetVerticesDirty(); } }
 
+        // 设置不可点击
         [SerializeField] private bool m_RaycastTarget = false;
 
         /// <summary>
@@ -170,7 +171,7 @@ namespace UnityEngine.UI
         [NonSerialized] protected UnityAction m_OnDirtyMaterialCallback;
 
         [NonSerialized] protected static Mesh s_Mesh;
-        [NonSerialized] private static readonly VertexHelper s_VertexHelper = new VertexHelper();
+        [NonSerialized] protected static readonly VertexHelper s_VertexHelper = new VertexHelper();
 
         [NonSerialized] protected Mesh m_CachedMesh;
         [NonSerialized] protected Vector2[] m_CachedUvs;
@@ -617,7 +618,10 @@ namespace UnityEngine.UI
 
         private void DoMeshGeneration()
         {
-            if (rectTransform != null && rectTransform.rect.width >= 0 && rectTransform.rect.height >= 0)
+            // scale/alpha为0，也clear mesh
+            if (rectTransform != null && rectTransform.rect.width >= 0 && rectTransform.rect.height >= 0 
+                && rectTransform.localScale.x > 0 && rectTransform.localScale.y > 0
+                && color.a > 0)
                 OnPopulateMesh(s_VertexHelper);
             else
                 s_VertexHelper.Clear(); // clear the vertex helper so invalid graphics dont draw.
@@ -629,7 +633,10 @@ namespace UnityEngine.UI
                 ((IMeshModifier)components[i]).ModifyMesh(s_VertexHelper);
 
             ListPool<Component>.Release(components);
+            FillSetMesh();
+        }
 
+        protected void FillSetMesh() {
             s_VertexHelper.FillMesh(workerMesh);
             canvasRenderer.SetMesh(workerMesh);
         }
