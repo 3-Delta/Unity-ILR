@@ -195,3 +195,4 @@ Client/ProjectSettings/ProjectVersion.txt
 /Client/Assets/Scripts/Framework/Hotfix/ILRuntime/Delegates/Analysis
 /Resources/Hotfix/ILRuntime/Hotfix.csproj
 /Client/*.sln
+/Client/*.vsconfig
