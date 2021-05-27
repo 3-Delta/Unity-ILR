@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.elringus.spritedicing": {
+      "version": "https://github.com/Elringus/SpriteDicing.git#package",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a081a4dbabcf8d4656f50f12f8f8df08d263ab25"
+    },
     "com.oddworm.heapexplorer": {
       "version": "https://github.com/pschraut/UnityHeapExplorer.git#4.0.0",
       "depth": 0,

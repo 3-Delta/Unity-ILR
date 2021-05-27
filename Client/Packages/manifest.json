@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.elringus.spritedicing": "https://github.com/Elringus/SpriteDicing.git#package",
     "com.oddworm.heapexplorer": "https://github.com/pschraut/UnityHeapExplorer.git#4.0.0",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ide.rider": "1.1.4",
